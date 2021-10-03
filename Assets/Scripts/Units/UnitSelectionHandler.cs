@@ -22,9 +22,9 @@ public class UnitSelectionHandler : MonoBehaviour
     {
         mainCamera = Camera.main;
 
-        if (NetworkClient.connection != null)
+        if (NetworkManager.Singleton.IsClient)
         {
-            player = NetworkClient.connection.identity.GetComponent<RTSPlayer>();
+            player = (NetworkManager.Singleton as RTSNetworkManager).ClientGetRTSPlayerByUID(NetworkManager.Singleton.LocalClientId);
         }
 
         Unit.AuthorityOnUnitDespawned += AuthorityHandleUnitDespawned;
@@ -113,7 +113,7 @@ public class UnitSelectionHandler : MonoBehaviour
                 return;
             }
 
-            if (!unit.hasAuthority)
+            if (!unit.IsOwner)
             {
                 return;
             }

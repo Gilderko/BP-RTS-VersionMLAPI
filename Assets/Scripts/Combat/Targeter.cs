@@ -35,8 +35,10 @@ public class Targeter : NetworkBehaviour
     }
 
     [ServerRpc]
-    public void CmdSetTargetServerRpc(GameObject targetGameObject)
+    public void CmdSetTargetServerRpc(ulong playerID, ulong instanceID)
     {
+        var targetGameObject = NetworkManager.ConnectedClients[playerID].OwnedObjects.Find(obj => obj.NetworkObjectId == instanceID);
+
         Targetable newTarget;
 
         if (!targetGameObject.TryGetComponent<Targetable>(out newTarget))

@@ -1,5 +1,6 @@
 using MLAPI;
 using MLAPI.Connection;
+using MLAPI.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,27 +15,65 @@ public class RTSNetworkManager : NetworkManager
     public static event System.Action ClientOnConnected;
     public static event System.Action ClientOnDisconnected;
 
-    public List<RTSPlayer> ClientPlayers { get; } = new List<RTSPlayer>();
+    public List<RTSPlayer> Players { get; } = new List<RTSPlayer>();
 
     private bool isGameInProgress = false;
 
+
     private void Start()
-    {
-        
+    {        
         OnClientConnectedCallback += HandleClientConnected;
         OnClientDisconnectCallback += HandleClientDisconnected;
+        NetworkSceneManager.OnSceneSwitched += OnServerSceneChanged;
+    }
+
+    private void OnServerSceneChanged()
+    {
+        if (IsServer)
+        {
+            if (SceneManager.GetActiveScene().name.StartsWith("Scene_Map"))
+            {
+                GameOverHandler gameOverHandlerInstance = Instantiate(gameOverHandler);         
+                gameOverHandlerInstance.GetComponent<NetworkObject>().Spawn();
+
+                Transform parentToSpawnPoints = GameObject.FindGameObjectWithTag("SpawnPoints").transform;
+
+                List<int> occupiedIndexes = new List<int>();
+
+                foreach (RTSPlayer player in Players)
+                {
+                    int index = 0;
+
+                    while (true)
+                    {
+                        index = Random.Range(0, parentToSpawnPoints.childCount);
+                        if (!occupiedIndexes.Contains(index))
+
+                            occupiedIndexes.Add(index);
+                        break;
+                    }                    
+
+                    GameObject baseInstance = Instantiate(playerBase, parentToSpawnPoints.GetChild(index).position, Quaternion.identity);
+
+                    baseInstance.GetComponent<NetworkObject>().ChangeOwnership(LocalClientId);
+                    baseInstance.GetComponent<NetworkObject>().Spawn();
+
+                    player.ChangeStartingPosition(baseInstance.transform.position);
+                }
+            }
+        }       
     }
 
     private void HandleClientDisconnected(ulong obj)
     {
         if (IsClient)
         {
-            ClientPlayers.Clear();
+            Players.Clear();
             ClientOnDisconnected?.Invoke();            
         }
         else if (IsServer)
         {
-            ClientPlayers.RemoveAll(player => player.OwnerClientId == obj);
+            Players.RemoveAll(player => player.OwnerClientId == obj);
         }
     }
 
@@ -46,127 +85,54 @@ public class RTSNetworkManager : NetworkManager
         }
         else if (IsServer)
         {
+            if (isGameInProgress)
+            {
+                DisconnectClient(obj);
+                return;
+            }
+
             RTSPlayer player = ConnectedClients[obj].PlayerObject.GetComponent<RTSPlayer>();
 
-            player.SetPlayerName($"Player {ClientPlayers.Count}");
+            Players.Add(player);
+
+            player.SetPlayerName($"Player {Players.Count}");
 
             player.SetTeamColor(Random.ColorHSV());
 
-            player.SetPartyOwner(ClientPlayers.Count == 1);
+            player.SetPartyOwner(Players.Count == 1);
         }
     }
 
-    #region Server    
-
-
-
-    [Server]
-    public override void OnServerConnect(NetworkConnection conn)
+    public void OnDestroy()
     {
-        if (!isGameInProgress) { return; }
+        if (IsServer)
+        {
+            Players.Clear();
 
-        conn.Disconnect();
+            isGameInProgress = false;
+        }
     }
 
-    [Server]
-    public override void OnServerDisconnect(NetworkConnection conn)
-    {
-        RTSPlayer player = conn.identity.GetComponent<RTSPlayer>();
+    #region Server  
 
-        ClientPlayers.Remove(player);
-
-        base.OnServerDisconnect(conn);
-    }
-
-    [Server]
-    public override void OnStopServer()
-    {
-        ClientPlayers.Clear();
-
-        isGameInProgress = false;
-
-        base.OnStopServer();
-    }
-
-    [Server]
     public void StartGame()
     {
-        if (ClientPlayers.Count < 2) { return; }
+        if (Players.Count < 2) { return; }
 
         isGameInProgress = true;
 
-        ServerChangeScene("Scene_Map");
+        NetworkSceneManager.SwitchScene("Scene_map");
+
     }
 
-    [Server]
-    public override void OnServerAddPlayer(NetworkConnection conn)
-    {
-        base.OnServerAddPlayer(conn);
-
-        RTSPlayer player = conn.identity.GetComponent<RTSPlayer>();
-
-        ClientPlayers.Add(player);
-
-        player.SetPlayerName($"Player {ClientPlayers.Count}");
-
-        player.SetTeamColor(Random.ColorHSV());
-
-        player.SetPartyOwner(ClientPlayers.Count == 1);
-    }
-
-    [Server]
-    public override void OnServerSceneChanged(string sceneName)
-    {
-        base.OnServerSceneChanged(sceneName);
-        if (SceneManager.GetActiveScene().name.StartsWith("Scene_Map"))
-        {
-            GameOverHandler gameOverHandlerInstance = Instantiate(gameOverHandler);
-
-            NetworkServer.Spawn(gameOverHandlerInstance.gameObject);
-
-            foreach(RTSPlayer player in ClientPlayers)
-            {
-                GameObject baseInstance = Instantiate(playerBase, GetStartPosition().position, Quaternion.identity);
-                Debug.Log(baseInstance.transform.position);
-                NetworkServer.Spawn(baseInstance, player.connectionToClient);
-
-                player.ChangeStartingPosition(baseInstance.transform.position);
-            }  
-        }
-    }
+    
 
     #endregion
 
-    #region Client
-
-    [Client]
-    public override void OnClientConnect(NetworkConnection conn)
+    public RTSPlayer ClientGetRTSPlayerByUID(ulong UID)
     {
-        base.OnClientConnect(conn);
-
-        ClientOnConnected?.Invoke();
+        return Players.Find(player => player.OwnerClientId == UID);
     }
 
-    [Client]
-    public override void OnClientDisconnect(NetworkConnection conn)
-    {
-        base.OnClientDisconnect(conn);
 
-        ClientOnDisconnected?.Invoke();
-    }
-
-    [Client]
-    public override void OnStopClient()
-    {
-        base.OnStopClient();
-
-        ClientPlayers.Clear();
-    }
-
-    public RTSPlayer ClientGetRTSPlayer()
-    {
-        return ClientSidePlayer;
-    }
-
-    #endregion
 }

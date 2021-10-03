@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class Targetable : NetworkBehaviour
 {
     [SerializeField] private Transform aimAtPoint = null;

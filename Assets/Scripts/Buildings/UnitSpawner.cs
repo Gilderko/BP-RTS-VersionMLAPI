@@ -76,7 +76,7 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
             return;
         }
 
-        RTSPlayer player = RTSPlayer.GetPlayerByID(OwnerClientId);
+        RTSPlayer player = (NetworkManager.Singleton as RTSNetworkManager).ClientGetRTSPlayerByUID(OwnerClientId);
 
         if (player.GetResources() < unitPrefab.GetResourceCost())
         {
@@ -103,9 +103,10 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
         }
 
         GameObject spawnedUnit = Instantiate(unitPrefab.gameObject, spawnLocation.position, spawnLocation.rotation);
-        
-        spawnedUnit.GetComponent<NetworkObject>().Spawn();
+
         spawnedUnit.GetComponent<NetworkObject>().ChangeOwnership(OwnerClientId);
+        spawnedUnit.GetComponent<NetworkObject>().Spawn();
+        
 
 
         Vector3 spawnOffset = Random.insideUnitSphere * spawnMoveRange;

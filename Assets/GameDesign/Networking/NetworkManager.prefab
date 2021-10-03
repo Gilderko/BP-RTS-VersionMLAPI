@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2258145404371899145}
-  - component: {fileID: 2258145404371899147}
   - component: {fileID: 2258145404371899144}
+  - component: {fileID: 383591056730864977}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -32,29 +32,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2258145404371899147
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2258145404371899146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Port: 7777
-  NoDelay: 1
-  Interval: 10
-  Timeout: 10000
-  FastResend: 2
-  CongestionWindow: 0
-  SendWindowSize: 4096
-  ReceiveWindowSize: 4096
-  debugLog: 0
-  statisticsGUI: 0
-  statisticsLog: 0
 --- !u!114 &2258145404371899144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,32 +44,69 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f632ece96f2cc774898a06bdb1e99fee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dontDestroyOnLoad: 1
-  PersistNetworkManagerToOfflineScene: 0
-  runInBackground: 1
-  autoStartServerBuild: 1
-  serverTickRate: 30
-  serverBatching: 1
-  serverBatchInterval: 0
-  offlineScene: Assets/Scenes/MenuScene.unity
-  onlineScene: 
-  transport: {fileID: 2258145404371899147}
-  networkAddress: localhost
-  maxConnections: 100
-  disconnectInactiveConnections: 0
-  disconnectInactiveTimeout: 60
-  authenticator: {fileID: 0}
-  playerPrefab: {fileID: 5231475737836859974, guid: 1609d403e2ec74a4d93883e0749437f2, type: 3}
-  autoCreatePlayer: 1
-  playerSpawnMethod: 0
-  spawnPrefabs:
-  - {fileID: 7092738811355293511, guid: d69c0fe257cc23f4eb1b8e4dc975ac69, type: 3}
-  - {fileID: 4538862654306239700, guid: 15e90b0019d52b34d98aa4678a1a18a6, type: 3}
-  - {fileID: 4482481897922476592, guid: a72e82f852b74654b81d61cd593ecf4f, type: 3}
-  - {fileID: 4667478445363654578, guid: 51225ebfc2af578448f3b05f4bdfd2ec, type: 3}
-  - {fileID: 701958473301729780, guid: 5f506acded725b04ea3c310993d08524, type: 3}
-  - {fileID: 4538862654306239700, guid: 74be5843e39fcd5449f244d1618ef674, type: 3}
-  - {fileID: 2787935791273947892, guid: 341042a0a3e286a498a62993685198a2, type: 3}
-  - {fileID: 2912728509280229007, guid: 3c03a7416dbd1fc4d9d0410f9875ba79, type: 3}
+  DontDestroy: 1
+  RunInBackground: 1
+  LogLevel: 1
+  NetworkConfig:
+    ProtocolVersion: 0
+    NetworkTransport: {fileID: 383591056730864977}
+    RegisteredScenes:
+    - MenuScene
+    AllowRuntimeSceneChanges: 0
+    NetworkPrefabs: []
+    PlayerPrefabHash:
+      id: 0
+    CreatePlayerPrefab: 1
+    ReceiveTickrate: 64
+    NetworkTickIntervalSec: 0.05
+    MaxReceiveEventsPerTickRate: 500
+    EventTickrate: 64
+    ClientConnectionBufferTimeout: 10
+    ConnectionApproval: 0
+    ConnectionData: 
+    EnableTimeResync: 0
+    TimeResyncInterval: 30
+    EnableNetworkVariable: 1
+    EnsureNetworkVariableLengthSafety: 0
+    EnableSceneManagement: 1
+    ForceSamePrefabs: 1
+    UsePrefabSync: 0
+    RecycleNetworkIds: 1
+    NetworkIdRecycleDelay: 120
+    RpcHashSize: 0
+    LoadSceneTimeOut: 120
+    EnableMessageBuffering: 1
+    MessageBufferTimeout: 20
+    EnableNetworkLogs: 1
   playerBase: {fileID: 4538862654306239700, guid: 15e90b0019d52b34d98aa4678a1a18a6, type: 3}
   gameOverHandler: {fileID: 1273161702178869714, guid: 51225ebfc2af578448f3b05f4bdfd2ec, type: 3}
+  parentToSpawnPoints: {fileID: 0}
+  references:
+    version: 1
+    00000000:
+      type: {class: , ns: , asm: }
+--- !u!114 &383591056730864977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2258145404371899146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b84c2d8dfe509a34fb59e2b81f8e1319, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MessageBufferSize: 5120
+  MaxConnections: 100
+  MaxSentMessageQueueSize: 128
+  ConnectAddress: 127.0.0.1
+  ConnectPort: 7777
+  ServerListenPort: 7777
+  ServerWebsocketListenPort: 8887
+  SupportWebsocket: 0
+  Channels: []
+  UseMLAPIRelay: 0
+  MLAPIRelayAddress: 184.72.104.138
+  MLAPIRelayPort: 8888
+  MessageSendMode: 0

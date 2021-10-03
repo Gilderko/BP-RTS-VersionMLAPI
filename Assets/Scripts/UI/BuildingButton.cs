@@ -30,9 +30,9 @@ public class BuildingButton : MonoBehaviour, IPointerClickHandler
         priceText.text = representedBuilding.GetPrice().ToString();
         buildingCollider = representedBuilding.GetComponent<BoxCollider>();
 
-        if (NetworkManager.Singleton.IsConnectedClient)
+        if (NetworkManager.Singleton.IsClient)
         {
-
+            player = (NetworkManager.Singleton as RTSNetworkManager).ClientGetRTSPlayerByUID(NetworkManager.Singleton.LocalClientId);
         }        
     }
 
@@ -57,7 +57,7 @@ public class BuildingButton : MonoBehaviour, IPointerClickHandler
         {
             if (hasHit)
             {
-                player.CmdTryPlaceBuilding(representedBuilding.GetID(), hit.point);
+                player.CmdTryPlaceBuildingServerRpc(representedBuilding.GetID(), hit.point);
             }
 
             Destroy(buildingPreviewInstance);

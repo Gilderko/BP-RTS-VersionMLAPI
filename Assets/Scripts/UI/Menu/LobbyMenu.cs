@@ -40,7 +40,7 @@ public class LobbyMenu : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        List<RTSPlayer> players = ((RTSNetworkManager) NetworkManager.Singleton).ClientPlayers;
+        List<RTSPlayer> players = ((RTSNetworkManager) NetworkManager.Singleton).Players;
 
         for (int i = 0; i < players.Count; i++)
         {
@@ -70,6 +70,6 @@ public class LobbyMenu : MonoBehaviour
 
     public void StartGame()
     {
-        RTSPlayer.GetPlayerByID(NetworkManager.Singleton.LocalClientId).CmdStartGame();
+        (NetworkManager.Singleton as RTSNetworkManager).ClientGetRTSPlayerByUID(NetworkManager.Singleton.LocalClientId).CmdStartGameServerRpc();
     }
 }

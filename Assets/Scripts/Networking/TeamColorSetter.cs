@@ -17,24 +17,16 @@ public class TeamColorSetter : NetworkBehaviour
     {
         if (IsClient)
         {
-
+            teamColor.OnValueChanged += HandleTeamColorUpdated;
         }
         else if (IsServer)
         {
-            RTSPlayer player = RTSPlayer.GetPlayerByID(OwnerClientId);
+            RTSPlayer player = (NetworkManager.Singleton as RTSNetworkManager).ClientGetRTSPlayerByUID(OwnerClientId);
 
-            teamColor = player.GetTeamColor();
+            teamColor.Value = player.GetTeamColor();
         }
 
         base.NetworkStart();
-    }
-
-    [Server]
-    public override void OnStartServer()
-    {
-        
-
-        base.OnStartServer();
     }
 
     #endregion

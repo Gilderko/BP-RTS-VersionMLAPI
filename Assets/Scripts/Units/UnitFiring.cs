@@ -16,40 +16,40 @@ public class UnitFiring : NetworkBehaviour
 
     #region Server
 
-    [ServerCallback]
     private void Update()
     {
-        Targetable target = targeter.GetTarget();
-
-        if (target == null)
+        if (IsServer)
         {
-            return;
-        }
+            Targetable target = targeter.GetTarget();
 
-        if (!CanFireAtTarget())
-        {
-            return;
-        }
+            if (target == null)
+            {
+                return;
+            }
 
-        Debug.Log("Can FIRE");
+            if (!CanFireAtTarget())
+            {
+                return;
+            }
 
-        Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - transform.position);
+            Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - transform.position);
 
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
-        if (Time.time > (1 / fireRate) + lastFireTime)
-        {
-            Quaternion projectRotation = Quaternion.LookRotation(target.GetAimAtPoint().position - projectileSpawnPoint.position);
+            if (Time.time > (1 / fireRate) + lastFireTime)
+            {
+                Quaternion projectRotation = Quaternion.LookRotation(target.GetAimAtPoint().position - projectileSpawnPoint.position);
 
-            GameObject projectileInstance = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectRotation);
+                GameObject projectileInstance = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectRotation);
+                
+                projectileInstance.GetComponent<NetworkObject>().ChangeOwnership(OwnerClientId);
+                projectileInstance.GetComponent<NetworkObject>().Spawn();
 
-            NetworkServer.Spawn(projectileInstance, connectionToClient);
-
-            lastFireTime = Time.time;
-        }
+                lastFireTime = Time.time;
+            }
+        }        
     }
 
-    [Server]
     private bool CanFireAtTarget()
     {
         return (targeter.GetTarget().transform.position - transform.position).sqrMagnitude <= fireRange * fireRange;

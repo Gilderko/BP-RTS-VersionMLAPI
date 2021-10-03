@@ -1,4 +1,5 @@
 ﻿using MLAPI;
+using MLAPI.Messaging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,27 +15,28 @@ public class UnitMovement : NetworkBehaviour
 
     #region Server
 
-    [Server]
-    public override void OnStartServer()
+    public override void NetworkStart()
     {
-        base.OnStartServer();
-        GameOverHandler.ServerOnGameOver += ServerHandleGameOver;
+        if (IsServer)
+        {
+            GameOverHandler.ServerOnGameOver += ServerHandleGameOver;
+        }
+        base.NetworkStart();
     }
 
-    [Server]
+    public void OnDestroy()
+    {
+        if (IsServer)
+        {
+            GameOverHandler.ServerOnGameOver -= ServerHandleGameOver;
+        }
+    }
+
     private void ServerHandleGameOver()
     {
         agent.ResetPath();
     }
 
-    [Server]
-    public override void OnStopServer()
-    {
-        base.OnStopServer();
-        GameOverHandler.ServerOnGameOver -= ServerHandleGameOver;
-    }
-
-    [Server]
     public void ServerMove(Vector3 position)
     {
         targeter.ClearTarget();
@@ -48,43 +50,41 @@ public class UnitMovement : NetworkBehaviour
         agent.SetDestination(position);
     }
 
-    [ServerCallback]
     private void Update()
     {
-        Targetable target = targeter.GetTarget();
-
-        if (target != null)
+        if (IsServer)
         {
-            if ((target.transform.position - transform.position).sqrMagnitude > chaseRange * chaseRange)
+            Targetable target = targeter.GetTarget();
+
+            if (target != null)
             {
-                agent.SetDestination(targeter.GetTarget().transform.position);
+                if ((target.transform.position - transform.position).sqrMagnitude > chaseRange * chaseRange)
+                {
+                    agent.SetDestination(targeter.GetTarget().transform.position);
+                }
+                else if (agent.hasPath)
+                {
+                    agent.ResetPath();
+                }
             }
-            else if (agent.hasPath)
+            else
             {
+                if (!agent.hasPath || agent.remainingDistance >= agent.stoppingDistance)
+                {
+                    return;
+                }
+
                 agent.ResetPath();
             }
-        }
-        else
-        {
-            if (!agent.hasPath || agent.remainingDistance >= agent.stoppingDistance)
-            {
-                return;
-            }
-
-            agent.ResetPath();
-        }       
+        }        
     }
 
-    [Command]
-    public void CmdMove
+    [ServerRpc]
+    public void CmdMoveServerRpc
         (Vector3 position)
     {
         ServerMove(position);
     }
-
-    #endregion
-
-    #region Client    
 
     #endregion
 }

@@ -1,3 +1,4 @@
+using MLAPI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -63,7 +64,8 @@ public class UnitCommandGiver : MonoBehaviour
     {
         foreach (Unit unit in unitSelectionHandler.GetSelectedUnits())
         {
-            unit.GetTargeter().CmdSetTargetServerRpc(target.gameObject);
+            NetworkObject targetNetworkObj = target.GetComponent<NetworkObject>();
+            unit.GetTargeter().CmdSetTargetServerRpc(targetNetworkObj.OwnerClientId, targetNetworkObj.NetworkObjectId);
         }
     }
 
@@ -71,7 +73,7 @@ public class UnitCommandGiver : MonoBehaviour
     {
         foreach(Unit unit in unitSelectionHandler.GetSelectedUnits())
         {
-            unit.GetUnitMovement().CmdMove(point);
+            unit.GetUnitMovement().CmdMoveServerRpc(point);
         }
     }
 }

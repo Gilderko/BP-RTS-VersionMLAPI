@@ -10,50 +10,51 @@ public class UnitProjectile : NetworkBehaviour
     [SerializeField] private float destroyAfterSeconds = 5f;
     [SerializeField] private float launchForce = 10f;
 
-    private void Start()
+    public override void NetworkStart()
     {
         rb.velocity = transform.forward * launchForce;
+
+        if (IsServer)
+        {
+            Invoke(nameof(DestroySelf), destroyAfterSeconds);
+        }
+
+        base.NetworkStart();
     }
-
-
 
     #region Server
 
-    [ServerCallback]
+
     private void OnTriggerEnter(Collider other)
     {
-        NetworkIdentity identity;
-        if (!other.TryGetComponent<NetworkIdentity>(out identity))
+        if (IsServer)
         {
-            return;
-        }
+            NetworkObject otherObjectIHit;
+            if (!other.TryGetComponent<NetworkObject>(out otherObjectIHit))
+            {
+                return;
+            }
 
-        if (identity.connectionToClient == connectionToClient)
-        {
-            return;
-        }
+            if (otherObjectIHit.OwnerClientId == OwnerClientId)
+            {
+                return;
+            }
 
-        Health health;
-        if (!other.TryGetComponent<Health>(out health))
-        {
-            return;
-        }
+            Health health;
+            if (!other.TryGetComponent<Health>(out health))
+            {
+                return;
+            }
 
-        health.DealDamage(damageToDeal);
+            health.DealDamage(damageToDeal);
 
-        DestroySelf();
+            DestroySelf();
+        }       
     }
-
-    [Server]
-    public override void OnStartServer()
-    {
-        Invoke(nameof(DestroySelf), destroyAfterSeconds);
-    }
-
-    [Server]
+ 
     private void DestroySelf()
     {
-        NetworkServer.Destroy(gameObject);
+        Destroy(gameObject);
     }
 
     #endregion

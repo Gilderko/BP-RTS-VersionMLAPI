@@ -609,10 +609,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2258145404371899144, guid: 427d8cbb5e538e44e85450422df01475, type: 3}
-      propertyPath: onlineScene
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 2258145404371899145, guid: 427d8cbb5e538e44e85450422df01475, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -3033,7 +3029,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 648670302}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: HostLobbyCallback
+        m_MethodName: HostServerCallback
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

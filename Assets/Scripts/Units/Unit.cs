@@ -20,9 +20,7 @@ public class Unit : NetworkBehaviour
     public static event Action<Unit> ServerOnUnitDespawned;
 
     public static event Action<Unit> AuthorityOnUnitSpawned;
-    public static event Action<Unit> AuthorityOnUnitDespawned;
-
-    
+    public static event Action<Unit> AuthorityOnUnitDespawned;    
 
     public override void NetworkStart()
     {
