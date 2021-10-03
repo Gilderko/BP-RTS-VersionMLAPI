@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 using TMPro;
 using UnityEngine.UI;
 using MLAPI.Messaging;
+using UnityEngine.AI;
 
 public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
 {
@@ -76,7 +77,7 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
             return;
         }
 
-        RTSPlayer player = (NetworkManager.Singleton as RTSNetworkManager).ClientGetRTSPlayerByUID(OwnerClientId);
+        RTSPlayer player = (NetworkManager.Singleton as RTSNetworkManager).GetRTSPlayerByUID(OwnerClientId);
 
         if (player.GetResources() < unitPrefab.GetResourceCost())
         {
@@ -104,16 +105,7 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
 
         GameObject spawnedUnit = Instantiate(unitPrefab.gameObject, spawnLocation.position, spawnLocation.rotation);
 
-        spawnedUnit.GetComponent<NetworkObject>().ChangeOwnership(OwnerClientId);
-        spawnedUnit.GetComponent<NetworkObject>().Spawn();
-        
-
-
-        Vector3 spawnOffset = Random.insideUnitSphere * spawnMoveRange;
-        spawnOffset.y = spawnLocation.position.y;
-
-        UnitMovement unitMovement = spawnedUnit.GetComponent<UnitMovement>();
-        unitMovement.ServerMove(spawnOffset + spawnLocation.position);
+        spawnedUnit.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);        
 
         queuedUnits.Value--;
         unitTimer.Value = 0.0f;

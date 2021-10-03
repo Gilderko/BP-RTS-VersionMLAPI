@@ -32,7 +32,7 @@ public class BuildingButton : MonoBehaviour, IPointerClickHandler
 
         if (NetworkManager.Singleton.IsClient)
         {
-            player = (NetworkManager.Singleton as RTSNetworkManager).ClientGetRTSPlayerByUID(NetworkManager.Singleton.LocalClientId);
+            player = (NetworkManager.Singleton as RTSNetworkManager).GetRTSPlayerByUID(NetworkManager.Singleton.LocalClientId);
         }        
     }
 

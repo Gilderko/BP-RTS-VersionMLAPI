@@ -1,5 +1,6 @@
 ﻿using MLAPI;
 using MLAPI.Messaging;
+using MLAPI.Prototyping;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ public class UnitMovement : NetworkBehaviour
     {
         if (IsServer)
         {
-            GameOverHandler.ServerOnGameOver += ServerHandleGameOver;
+            GameOverHandler.ServerOnGameOver += ServerHandleGameOverClientRpc;
         }
         base.NetworkStart();
     }
@@ -28,31 +29,41 @@ public class UnitMovement : NetworkBehaviour
     {
         if (IsServer)
         {
-            GameOverHandler.ServerOnGameOver -= ServerHandleGameOver;
+            GameOverHandler.ServerOnGameOver -= ServerHandleGameOverClientRpc;
         }
     }
 
-    private void ServerHandleGameOver()
+    #endregion
+
+    [ClientRpc]
+    private void ServerHandleGameOverClientRpc()
     {
         agent.ResetPath();
     }
 
-    public void ServerMove(Vector3 position)
+    public void MoveClient(Vector3 position)
     {
+        if (!IsOwner)
+        {
+            return;
+        }
+
         targeter.ClearTarget();
 
         NavMeshHit hit;
         if (!NavMesh.SamplePosition(position, out hit, 1f, NavMesh.AllAreas))
         {
+            Debug.Log("Failed to find position");
             return;
         }
 
+        Debug.Log($"Destination stated {position}");
         agent.SetDestination(position);
     }
 
     private void Update()
     {
-        if (IsServer)
+        if (IsClient)
         {
             Targetable target = targeter.GetTarget();
 
@@ -77,14 +88,7 @@ public class UnitMovement : NetworkBehaviour
                 agent.ResetPath();
             }
         }        
-    }
+    }  
 
-    [ServerRpc]
-    public void CmdMoveServerRpc
-        (Vector3 position)
-    {
-        ServerMove(position);
-    }
-
-    #endregion
+    
 }

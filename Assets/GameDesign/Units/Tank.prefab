@@ -164,6 +164,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tank
       objectReference: {fileID: 0}
+    - target: {fileID: 7142784128122669826, guid: e9f000bf4d8860d46b62c922f7f3441c, type: 3}
+      propertyPath: PrefabHash
+      value: 8498893371396815377
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142784128122669826, guid: e9f000bf4d8860d46b62c922f7f3441c, type: 3}
+      propertyPath: PrefabHashGenerator
+      value: Tank
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e9f000bf4d8860d46b62c922f7f3441c, type: 3}
 --- !u!4 &7092738811355293510 stripped

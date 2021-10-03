@@ -103,6 +103,14 @@ PrefabInstance:
       propertyPath: m_fontSizeBase
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 6810589153410532229, guid: 4b3e5a13853b6ee44b2e86e4aa1190e1, type: 3}
+      propertyPath: PrefabHash
+      value: 10120740771415159021
+      objectReference: {fileID: 0}
+    - target: {fileID: 6810589153410532229, guid: 4b3e5a13853b6ee44b2e86e4aa1190e1, type: 3}
+      propertyPath: PrefabHashGenerator
+      value: FastCarSpawner
+      objectReference: {fileID: 0}
     - target: {fileID: 7400564354780051681, guid: 4b3e5a13853b6ee44b2e86e4aa1190e1, type: 3}
       propertyPath: m_RootOrder
       value: 0

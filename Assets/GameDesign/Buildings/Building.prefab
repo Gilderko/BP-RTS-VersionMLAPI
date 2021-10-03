@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4831045362370244124}
-  - component: {fileID: 6126553906837066608}
+  - component: {fileID: 8879786727902582136}
   - component: {fileID: 7636398998977903849}
   - component: {fileID: 754309320094126434}
   - component: {fileID: 8477070640197252249}
@@ -39,7 +39,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6126553906837066608
+--- !u!114 &8879786727902582136
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -48,14 +48,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1964136452132475433}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneId: 0
-  serverOnly: 0
-  visible: 0
-  m_AssetId: 
-  hasSpawned: 0
+  NetworkInstanceId: 0
+  PrefabHash: 14252238673812147849
+  PrefabHashGenerator: Building
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
 --- !u!65 &7636398998977903849
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -97,8 +97,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd057230fbd4a78468db3ee46bda4d62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   maxHealth: 100
 --- !u!114 &7188510340575244730
 MonoBehaviour:
@@ -127,8 +125,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50cd7a403079bec4a91ff5338e72585d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   icon: {fileID: 0}
   buildingID: -1
   price: 100
@@ -145,8 +141,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70fd8180c6b472a40bf02d5737f3d8da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   colorRenderers:
   - {fileID: 1620525454265704090}
   - {fileID: 0}

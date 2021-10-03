@@ -609,6 +609,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2258145404371899144, guid: 427d8cbb5e538e44e85450422df01475, type: 3}
+      propertyPath: NetworkConfig.PlayerPrefabHash
+      value: Unity.Multiplayer.MLAPI.Runtime MLAPI.Configuration.NullableBoolSerializable
+      objectReference: {fileID: 0}
+    - target: {fileID: 2258145404371899144, guid: 427d8cbb5e538e44e85450422df01475, type: 3}
+      propertyPath: NetworkConfig.PlayerPrefabHash.Value
+      value: 1897319656204293034
+      objectReference: {fileID: 0}
     - target: {fileID: 2258145404371899145, guid: 427d8cbb5e538e44e85450422df01475, type: 3}
       propertyPath: m_RootOrder
       value: 2

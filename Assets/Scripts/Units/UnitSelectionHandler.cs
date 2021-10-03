@@ -2,6 +2,7 @@ using MLAPI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,15 +17,16 @@ public class UnitSelectionHandler : MonoBehaviour
     private RTSPlayer player;
     private Camera mainCamera;
 
-    private List<Unit> selectedUnits = new List<Unit>();
+    [SerializeField] private List<Unit> selectedUnits = new List<Unit>();
 
     private void Start()
     {
         mainCamera = Camera.main;
 
-        if (NetworkManager.Singleton.IsClient)
+        if (NetworkManager.Singleton.IsConnectedClient)
         {
-            player = (NetworkManager.Singleton as RTSNetworkManager).ClientGetRTSPlayerByUID(NetworkManager.Singleton.LocalClientId);
+            Debug.Log($"Selection handler looking for {NetworkManager.Singleton.LocalClientId}");
+            player = (NetworkManager.Singleton as RTSNetworkManager).GetRTSPlayerByUID(NetworkManager.Singleton.LocalClientId);
         }
 
         Unit.AuthorityOnUnitDespawned += AuthorityHandleUnitDespawned;
@@ -48,6 +50,11 @@ public class UnitSelectionHandler : MonoBehaviour
 
     private void Update()
     {
+        if (!NetworkManager.Singleton.IsConnectedClient)
+        {
+            return;
+        }
+
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
             StartSelectionArea();
@@ -129,6 +136,8 @@ public class UnitSelectionHandler : MonoBehaviour
         {
             Vector2 min = unitSelectionArea.anchoredPosition - unitSelectionArea.sizeDelta / 2;
             Vector2 max = unitSelectionArea.anchoredPosition + unitSelectionArea.sizeDelta / 2;
+
+            Debug.Log($"You have amount of units {player.GetMyUnits().Count()}");
 
             foreach(Unit unit in player.GetMyUnits())
             {

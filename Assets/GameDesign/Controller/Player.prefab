@@ -52,7 +52,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5231475737836859972}
-  - component: {fileID: 5231475737836859975}
+  - component: {fileID: 2561627729595253783}
   - component: {fileID: -1515825777145437709}
   - component: {fileID: 7489960712119259178}
   m_Layer: 0
@@ -77,7 +77,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5231475737836859975
+--- !u!114 &2561627729595253783
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -86,14 +86,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 5231475737836859974}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneId: 0
-  serverOnly: 0
-  visible: 0
-  m_AssetId: 
-  hasSpawned: 0
+  NetworkInstanceId: 0
+  PrefabHash: 1897319656204293034
+  PrefabHashGenerator: Player
+  AlwaysReplicateAsRoot: 0
+  DontDestroyWithOwner: 0
 --- !u!114 &-1515825777145437709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,8 +106,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35dd78b8dfa5d07499a5f93b8561b231, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   buildingBlockCollisionLayer:
     serializedVersion: 2
     m_Bits: 449
@@ -136,8 +134,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8702a3ef6def3024fb254e44f9f92118, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   playerCameraTransform: {fileID: 3614415871907944298}
   speed: 35
   speedY: 3

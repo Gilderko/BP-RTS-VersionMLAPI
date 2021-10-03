@@ -165,6 +165,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: FastUnit
       objectReference: {fileID: 0}
+    - target: {fileID: 7142784128122669826, guid: e9f000bf4d8860d46b62c922f7f3441c, type: 3}
+      propertyPath: PrefabHash
+      value: 7646583732249761233
+      objectReference: {fileID: 0}
+    - target: {fileID: 7142784128122669826, guid: e9f000bf4d8860d46b62c922f7f3441c, type: 3}
+      propertyPath: PrefabHashGenerator
+      value: FastUnit
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e9f000bf4d8860d46b62c922f7f3441c, type: 3}
 --- !u!4 &2787935791273947893 stripped

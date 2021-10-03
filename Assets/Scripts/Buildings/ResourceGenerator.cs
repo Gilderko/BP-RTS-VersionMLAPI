@@ -20,7 +20,7 @@ public class ResourceGenerator : NetworkBehaviour
         if (IsServer)
         {
             timer = interval;
-            player = (NetworkManager.Singleton as RTSNetworkManager).ClientGetRTSPlayerByUID(OwnerClientId);
+            player = (NetworkManager.Singleton as RTSNetworkManager).GetRTSPlayerByUID(OwnerClientId);
 
             health.ServerOnDie += ServerHandleDie;
             GameOverHandler.ServerOnGameOver += ServerHandleGameOver;

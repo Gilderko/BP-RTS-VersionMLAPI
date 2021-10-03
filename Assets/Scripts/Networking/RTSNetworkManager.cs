@@ -19,7 +19,6 @@ public class RTSNetworkManager : NetworkManager
 
     private bool isGameInProgress = false;
 
-
     private void Start()
     {        
         OnClientConnectedCallback += HandleClientConnected;
@@ -55,8 +54,9 @@ public class RTSNetworkManager : NetworkManager
 
                     GameObject baseInstance = Instantiate(playerBase, parentToSpawnPoints.GetChild(index).position, Quaternion.identity);
 
-                    baseInstance.GetComponent<NetworkObject>().ChangeOwnership(LocalClientId);
-                    baseInstance.GetComponent<NetworkObject>().Spawn();
+                    Debug.Log(player.OwnerClientId);
+
+                    baseInstance.GetComponent<NetworkObject>().SpawnWithOwnership(player.OwnerClientId);                   
 
                     player.ChangeStartingPosition(baseInstance.transform.position);
                 }
@@ -93,8 +93,6 @@ public class RTSNetworkManager : NetworkManager
 
             RTSPlayer player = ConnectedClients[obj].PlayerObject.GetComponent<RTSPlayer>();
 
-            Players.Add(player);
-
             player.SetPlayerName($"Player {Players.Count}");
 
             player.SetTeamColor(Random.ColorHSV());
@@ -119,20 +117,28 @@ public class RTSNetworkManager : NetworkManager
     {
         if (Players.Count < 2) { return; }
 
+        Debug.Log("Server staring game");
+
         isGameInProgress = true;
 
-        NetworkSceneManager.SwitchScene("Scene_map");
-
-    }
-
-    
+        NetworkSceneManager.SwitchScene("Scene_Map");
+    }    
 
     #endregion
 
-    public RTSPlayer ClientGetRTSPlayerByUID(ulong UID)
+    public RTSPlayer GetRTSPlayerByUID(ulong UID)
     {
         return Players.Find(player => player.OwnerClientId == UID);
     }
 
 
+    public int GetPlayerCount()
+    {
+        return Players.Count;
+    }
+
+    public void Update()
+    {
+        Debug.Log(Players.Count());
+    }
 }

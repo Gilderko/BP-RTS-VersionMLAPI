@@ -73,7 +73,7 @@ public class UnitCommandGiver : MonoBehaviour
     {
         foreach(Unit unit in unitSelectionHandler.GetSelectedUnits())
         {
-            unit.GetUnitMovement().CmdMoveServerRpc(point);
+            unit.GetUnitMovement().MoveClient(point);
         }
     }
 }

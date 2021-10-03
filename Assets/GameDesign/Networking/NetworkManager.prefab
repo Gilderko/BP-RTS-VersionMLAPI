@@ -52,8 +52,27 @@ MonoBehaviour:
     NetworkTransport: {fileID: 383591056730864977}
     RegisteredScenes:
     - MenuScene
+    - Scene_Map
     AllowRuntimeSceneChanges: 0
-    NetworkPrefabs: []
+    NetworkPrefabs:
+    - Prefab: {fileID: 4538862654306239700, guid: 74be5843e39fcd5449f244d1618ef674, type: 3}
+      PlayerPrefab: 0
+    - Prefab: {fileID: 2912728509280229007, guid: 3c03a7416dbd1fc4d9d0410f9875ba79, type: 3}
+      PlayerPrefab: 0
+    - Prefab: {fileID: 701958473301729780, guid: 5f506acded725b04ea3c310993d08524, type: 3}
+      PlayerPrefab: 0
+    - Prefab: {fileID: 4538862654306239700, guid: 15e90b0019d52b34d98aa4678a1a18a6, type: 3}
+      PlayerPrefab: 0
+    - Prefab: {fileID: 5231475737836859974, guid: 1609d403e2ec74a4d93883e0749437f2, type: 3}
+      PlayerPrefab: 1
+    - Prefab: {fileID: 4482481897922476592, guid: a72e82f852b74654b81d61cd593ecf4f, type: 3}
+      PlayerPrefab: 0
+    - Prefab: {fileID: 2787935791273947892, guid: 341042a0a3e286a498a62993685198a2, type: 3}
+      PlayerPrefab: 0
+    - Prefab: {fileID: 7092738811355293511, guid: d69c0fe257cc23f4eb1b8e4dc975ac69, type: 3}
+      PlayerPrefab: 0
+    - Prefab: {fileID: 4667478445363654578, guid: 51225ebfc2af578448f3b05f4bdfd2ec, type: 3}
+      PlayerPrefab: 0
     PlayerPrefabHash:
       id: 0
     CreatePlayerPrefab: 1
@@ -80,11 +99,12 @@ MonoBehaviour:
     EnableNetworkLogs: 1
   playerBase: {fileID: 4538862654306239700, guid: 15e90b0019d52b34d98aa4678a1a18a6, type: 3}
   gameOverHandler: {fileID: 1273161702178869714, guid: 51225ebfc2af578448f3b05f4bdfd2ec, type: 3}
-  parentToSpawnPoints: {fileID: 0}
   references:
     version: 1
     00000000:
-      type: {class: , ns: , asm: }
+      type: {class: NullableBoolSerializable, ns: MLAPI.Configuration, asm: Unity.Multiplayer.MLAPI.Runtime}
+      data:
+        Value: 1897319656204293034
 --- !u!114 &383591056730864977
 MonoBehaviour:
   m_ObjectHideFlags: 0

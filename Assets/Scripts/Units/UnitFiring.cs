@@ -40,10 +40,9 @@ public class UnitFiring : NetworkBehaviour
             {
                 Quaternion projectRotation = Quaternion.LookRotation(target.GetAimAtPoint().position - projectileSpawnPoint.position);
 
-                GameObject projectileInstance = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectRotation);
+                GameObject projectileInstance = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectRotation);                
                 
-                projectileInstance.GetComponent<NetworkObject>().ChangeOwnership(OwnerClientId);
-                projectileInstance.GetComponent<NetworkObject>().Spawn();
+                projectileInstance.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
 
                 lastFireTime = Time.time;
             }

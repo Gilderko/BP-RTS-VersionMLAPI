@@ -62,6 +62,8 @@ public class RTSPlayer : NetworkBehaviour
 
     public override void NetworkStart()
     {
+        ((RTSNetworkManager)NetworkManager.Singleton).Players.Add(this);
+
         if (IsServer)
         {
             OnStartServer();
@@ -95,9 +97,7 @@ public class RTSPlayer : NetworkBehaviour
         Unit.ServerOnUnitSpawned += ServerHandleUnitSpawned;
         Unit.ServerOnUnitDespawned += ServerHandleUnitDespawned;
         Building.ServerOnBuildingSpawned += ServerHandleBuildingSpawned;
-        Building.ServerOnBuildingDespawned += ServerHandleBuildingDespawned;
-
-        DontDestroyOnLoad(gameObject);
+        Building.ServerOnBuildingDespawned += ServerHandleBuildingDespawned;        
     }
 
     public void SetPlayerName(string displayName)
@@ -136,6 +136,8 @@ public class RTSPlayer : NetworkBehaviour
         Unit.ServerOnUnitDespawned -= ServerHandleUnitDespawned;
         Building.ServerOnBuildingSpawned -= ServerHandleBuildingSpawned;
         Building.ServerOnBuildingDespawned -= ServerHandleBuildingDespawned;
+
+        ((RTSNetworkManager)NetworkManager.Singleton).Players.Remove(this);
     }
 
     private void ServerHandleUnitDespawned(Unit unit)
@@ -171,6 +173,8 @@ public class RTSPlayer : NetworkBehaviour
     [ServerRpc]
     public void CmdStartGameServerRpc()
     {
+        Debug.Log(isPartyOwner.Value);
+        Debug.Log("Server RPC Start game");
         if (!isPartyOwner.Value) 
         { 
             return; 
@@ -203,8 +207,7 @@ public class RTSPlayer : NetworkBehaviour
 
         GameObject building = Instantiate(buildingToPlace.gameObject, positionToSpawn, Quaternion.identity);
         
-        building.GetComponent<NetworkObject>().ChangeOwnership(OwnerClientId);
-        building.GetComponent<NetworkObject>().Spawn();
+        building.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
 
         AddResources(-buildingToPlace.GetPrice());
     }
@@ -216,7 +219,7 @@ public class RTSPlayer : NetworkBehaviour
 
     public void OnStartAuthority()
     {
-        if (IsOwner)
+        if (!IsOwner)
         {
             return;
         }
@@ -231,13 +234,9 @@ public class RTSPlayer : NetworkBehaviour
 
     public void OnStartClient()
     {
-        DontDestroyOnLoad(gameObject);
-
         resources.OnValueChanged += ClientHandleResourcesUpdated;
         playerName.OnValueChanged += ClientHandleDisplayNameUpdated;
-        startPosition.OnValueChanged += ClientHandleStartCameraPositionUpdated;
-
-        ((RTSNetworkManager)NetworkManager.Singleton).Players.Add(this);        
+        startPosition.OnValueChanged += ClientHandleStartCameraPositionUpdated;    
     }
 
  
@@ -289,7 +288,7 @@ public class RTSPlayer : NetworkBehaviour
             return;
         }
 
-        ((RTSNetworkManager)NetworkManager.Singleton).Players.Add(this);
+        ((RTSNetworkManager)NetworkManager.Singleton).Players.Remove(this);
 
         if (!IsOwner)
         {

@@ -70,6 +70,8 @@ public class LobbyMenu : MonoBehaviour
 
     public void StartGame()
     {
-        (NetworkManager.Singleton as RTSNetworkManager).ClientGetRTSPlayerByUID(NetworkManager.Singleton.LocalClientId).CmdStartGameServerRpc();
+        Debug.Log("Client wants to start");
+        Debug.Log((NetworkManager.Singleton as RTSNetworkManager).GetRTSPlayerByUID(NetworkManager.Singleton.LocalClientId).IsPartyOwner());
+        (NetworkManager.Singleton as RTSNetworkManager).GetRTSPlayerByUID(NetworkManager.Singleton.LocalClientId).CmdStartGameServerRpc();
     }
 }
