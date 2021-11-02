@@ -1,4 +1,4 @@
-using MLAPI;
+using Unity.Netcode;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -60,11 +60,11 @@ public class LobbyMenu : MonoBehaviour
     {
         if (NetworkManager.Singleton.IsServer)
         {
-            NetworkManager.Singleton.StopServer();
+            NetworkManager.Singleton.Shutdown();
         }
         else
         {
-            NetworkManager.Singleton.StopClient();
+            NetworkManager.Singleton.Shutdown();
 
             SceneManager.LoadScene(0);
         }

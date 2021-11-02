@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using MLAPI;
+using Unity.Netcode;
 using UnityEngine;
 
 public class UnitProjectile : NetworkBehaviour
@@ -10,7 +10,7 @@ public class UnitProjectile : NetworkBehaviour
     [SerializeField] private float destroyAfterSeconds = 5f;
     [SerializeField] private float launchForce = 10f;
 
-    public override void NetworkStart()
+    public override void OnNetworkSpawn()
     {
         rb.velocity = transform.forward * launchForce;
 
@@ -19,7 +19,7 @@ public class UnitProjectile : NetworkBehaviour
             Invoke(nameof(DestroySelf), destroyAfterSeconds);
         }
 
-        base.NetworkStart();
+        base.OnNetworkSpawn();
     }
 
     #region Server

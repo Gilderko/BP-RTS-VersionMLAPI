@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MLAPI;
+using Unity.Netcode;
 using UnityEngine.Events;
 using System;
 
@@ -22,7 +22,7 @@ public class Unit : NetworkBehaviour
     public static event Action<Unit> AuthorityOnUnitSpawned;
     public static event Action<Unit> AuthorityOnUnitDespawned;    
 
-    public override void NetworkStart()
+    public override void OnNetworkSpawn()
     {
 #if UNITY_SERVER
         if (IsServer)
@@ -36,10 +36,10 @@ public class Unit : NetworkBehaviour
             AuthorityOnUnitSpawned?.Invoke(this);
         }
 #endif
-        base.NetworkStart();
+        base.OnNetworkSpawn();
     }
 
-    private void OnDestroy()
+    public override void OnNetworkDespawn()
     {
 #if UNITY_SERVER
         if (IsServer)
@@ -53,6 +53,7 @@ public class Unit : NetworkBehaviour
             AuthorityOnUnitDespawned?.Invoke(this);
         }
 #endif
+        base.OnNetworkDespawn();
     }
 
 #region Server

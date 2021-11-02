@@ -1,12 +1,11 @@
-using MLAPI;
-using MLAPI.Messaging;
-using MLAPI.NetworkVariable;
+using Unity.Netcode;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using Unity.Collections;
 
 public class RTSPlayer : NetworkBehaviour
 {
@@ -31,21 +30,13 @@ public class RTSPlayer : NetworkBehaviour
     [SerializeField]
     private Vector2 cameraStartOffset = new Vector2(-5, -5);
 
-    private NetworkVariable<int> resources = new NetworkVariable<int>(
-        new NetworkVariableSettings() {WritePermission = NetworkVariablePermission.ServerOnly, ReadPermission = NetworkVariablePermission.Everyone },
-        500);
-    
-    private NetworkVariable<bool> isPartyOwner = new NetworkVariable<bool>(
-        new NetworkVariableSettings() { WritePermission = NetworkVariablePermission.ServerOnly, ReadPermission = NetworkVariablePermission.Everyone },
-        false);
-    
-    private NetworkVariable<string> playerName = new NetworkVariable<string>(
-        new NetworkVariableSettings() { WritePermission = NetworkVariablePermission.ServerOnly, ReadPermission = NetworkVariablePermission.Everyone },
-        "");
+    private NetworkVariable<int> resources = new NetworkVariable<int>(NetworkVariableReadPermission.OwnerOnly, 500);
 
-    private NetworkVariable<Vector3> startPosition = new NetworkVariable<Vector3>(
-        new NetworkVariableSettings() { WritePermission = NetworkVariablePermission.ServerOnly, ReadPermission = NetworkVariablePermission.Everyone },
-        new Vector3(0,0,21));
+    private NetworkVariable<bool> isPartyOwner = new NetworkVariable<bool>(NetworkVariableReadPermission.Everyone, false);
+
+    private NetworkVariable<FixedString32Bytes> playerName = new NetworkVariable<FixedString32Bytes>(NetworkVariableReadPermission.Everyone, "");
+
+    private NetworkVariable<Vector3> startPosition = new NetworkVariable<Vector3>(NetworkVariableReadPermission.Everyone, new Vector3(0, 0, 21));
 
     public event Action<int> ClientOnResourcesUpdated;
 
@@ -60,7 +51,7 @@ public class RTSPlayer : NetworkBehaviour
     [SerializeField] 
     private List<Building> myBuildings = new List<Building>();
 
-    public override void NetworkStart()
+    public override void OnNetworkSpawn()
     {
         ((RTSNetworkManager)NetworkManager.Singleton).Players.Add(this);
 
@@ -76,10 +67,10 @@ public class RTSPlayer : NetworkBehaviour
             OnStartClient();
         }
 #endif
-        base.NetworkStart();
+        base.OnNetworkSpawn();
     }
 
-    public void OnDestroy()
+    public override void OnNetworkDespawn()
     {
 #if UNITY_SERVER
         if (IsServer)
@@ -92,6 +83,7 @@ public class RTSPlayer : NetworkBehaviour
             OnStopClient();
         }
 #endif
+        base.OnNetworkDespawn();
     }
 
 
@@ -255,7 +247,7 @@ public class RTSPlayer : NetworkBehaviour
         AuthorityOnPartyOwnerChanged?.Invoke(newState);
     }
 
-    private void ClientHandleDisplayNameUpdated(string oldVal, string newVal)
+    private void ClientHandleDisplayNameUpdated(FixedString32Bytes oldVal, FixedString32Bytes newVal)
     {
         ClientOnInfoUpdated?.Invoke();
     }
@@ -402,6 +394,7 @@ public class RTSPlayer : NetworkBehaviour
     
     public string GetDisplayName()
     {
-        return playerName.Value;
+        var value = playerName.Value;
+        return value.ConvertToString();
     }
 }

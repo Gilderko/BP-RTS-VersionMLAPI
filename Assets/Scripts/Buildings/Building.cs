@@ -1,4 +1,4 @@
-using MLAPI;
+using Unity.Netcode;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ public class Building : NetworkBehaviour
     public static event Action<Building> AuthorityOnBuildingSpawned;
     public static event Action<Building> AuthorityOnBuildingDespawned; 
 
-    public override void NetworkStart()
+    public override void OnNetworkSpawn()
     {
 #if UNITY_SERVER
         if (IsServer)
@@ -30,10 +30,10 @@ public class Building : NetworkBehaviour
             AuthorityOnBuildingSpawned?.Invoke(this);
         }
 #endif
-        base.NetworkStart();
+        base.OnNetworkSpawn();
     }
 
-    private void OnDestroy()
+    public override void OnNetworkDespawn()
     {
 #if UNITY_SERVER
         if (IsServer)
@@ -46,6 +46,7 @@ public class Building : NetworkBehaviour
             AuthorityOnBuildingDespawned?.Invoke(this);
         }
 #endif
+        base.OnNetworkDespawn();
     }
 
     public GameObject GetBuildingPreview()

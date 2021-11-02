@@ -1,4 +1,4 @@
-using MLAPI;
+using Unity.Netcode;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -78,7 +78,7 @@ public class CameraController : NetworkBehaviour
         playerCameraTransform.position = pos;
     }
 
-    public override void NetworkStart()
+    public override void OnNetworkSpawn()
     {
         if (IsOwner)
         {
@@ -107,5 +107,4 @@ public class CameraController : NetworkBehaviour
     {
         prevInput = ctx.ReadValue<Vector2>();
     }
-
 }

@@ -1,19 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MLAPI;
-using MLAPI.NetworkVariable;
+using Unity.Netcode;
 
 public class TeamColorSetter : NetworkBehaviour
 {
     [SerializeField] private Renderer[] colorRenderers = new Renderer[0];
 
-    private NetworkVariable<Color> teamColor = new NetworkVariable<Color>(
-        new NetworkVariableSettings() {WritePermission = NetworkVariablePermission.ServerOnly, ReadPermission = NetworkVariablePermission.Everyone });
+    private NetworkVariable<Color> teamColor = new NetworkVariable<Color>(NetworkVariableReadPermission.Everyone, new Color());
 
     #region Server
 
-    public override void NetworkStart()
+    public override void OnNetworkSpawn()
     {
         if (IsClient)
         {
@@ -26,7 +24,7 @@ public class TeamColorSetter : NetworkBehaviour
             teamColor.Value = player.GetTeamColor();
         }
 
-        base.NetworkStart();
+        base.OnNetworkSpawn();
     }
 
     #endregion

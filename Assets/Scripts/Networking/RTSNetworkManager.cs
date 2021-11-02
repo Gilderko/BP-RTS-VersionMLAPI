@@ -1,16 +1,13 @@
-using MLAPI;
-using MLAPI.Connection;
-using MLAPI.SceneManagement;
+using Unity.Netcode;
+using Unity.Netcode.Editor;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class RTSNetworkManager : NetworkManager
 {
-    [SerializeField] private GameObject playerBase = null;
-    [SerializeField] private GameOverHandler gameOverHandler = null;
+    public int value = 5;
 
     public static event System.Action ClientOnConnected;
     public static event System.Action ClientOnDisconnected;
@@ -23,17 +20,22 @@ public class RTSNetworkManager : NetworkManager
     {        
         OnClientConnectedCallback += HandleClientConnected;
         OnClientDisconnectCallback += HandleClientDisconnected;
-        NetworkSceneManager.OnSceneSwitched += OnServerSceneChanged;
+        OnServerStarted += ConfigureNetworkSceneManager;
     }
 
-    private void OnServerSceneChanged()
+    private void ConfigureNetworkSceneManager()
+    {
+        SceneManager.OnSceneEvent += OnServerSceneChanged;
+    }
+
+    private void OnServerSceneChanged(SceneEvent sceneEvent)
     {
         if (IsServer)
         {
-            if (SceneManager.GetActiveScene().name.StartsWith("Scene_Map"))
+            if (sceneEvent.SceneName.StartsWith("Scene_Map"))
             {
-                GameOverHandler gameOverHandlerInstance = Instantiate(gameOverHandler);         
-                gameOverHandlerInstance.GetComponent<NetworkObject>().Spawn();
+                //GameOverHandler gameOverHandlerInstance = Instantiate(gameOverHandler);         
+                //gameOverHandlerInstance.GetComponent<NetworkObject>().Spawn();
 
                 Transform parentToSpawnPoints = GameObject.FindGameObjectWithTag("SpawnPoints").transform;
 
@@ -52,13 +54,13 @@ public class RTSNetworkManager : NetworkManager
                         break;
                     }                    
 
-                    GameObject baseInstance = Instantiate(playerBase, parentToSpawnPoints.GetChild(index).position, Quaternion.identity);
+                    /*GameObject baseInstance = Instantiate(playerBase, parentToSpawnPoints.GetChild(index).position, Quaternion.identity);
 
                     Debug.Log(player.OwnerClientId);
 
                     baseInstance.GetComponent<NetworkObject>().SpawnWithOwnership(player.OwnerClientId);                   
 
-                    player.ChangeStartingPosition(baseInstance.transform.position);
+                    player.ChangeStartingPosition(baseInstance.transform.position);*/
                 }
             }
         }       
@@ -119,7 +121,7 @@ public class RTSNetworkManager : NetworkManager
 
         isGameInProgress = true;
 
-        NetworkSceneManager.SwitchScene("Scene_Map");
+        SceneManager.LoadScene("Scene_Map",UnityEngine.SceneManagement.LoadSceneMode.Single);
     }    
 
     #endregion

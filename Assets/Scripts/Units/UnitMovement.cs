@@ -1,6 +1,4 @@
-﻿using MLAPI;
-using MLAPI.Messaging;
-using MLAPI.Prototyping;
+﻿using Unity.Netcode;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,21 +14,22 @@ public class UnitMovement : NetworkBehaviour
 
     #region Server
 
-    public override void NetworkStart()
+    public override void OnNetworkSpawn()
     {
         if (IsServer)
         {
             GameOverHandler.ServerOnGameOver += ServerHandleGameOverClientRpc;
         }
-        base.NetworkStart();
+        base.OnNetworkSpawn();
     }
 
-    public void OnDestroy()
+    public override void OnNetworkDespawn()
     {
         if (IsServer)
         {
             GameOverHandler.ServerOnGameOver -= ServerHandleGameOverClientRpc;
         }
+        base.OnNetworkDespawn();
     }
 
     #endregion

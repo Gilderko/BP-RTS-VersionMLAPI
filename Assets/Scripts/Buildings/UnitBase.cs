@@ -1,4 +1,4 @@
-using MLAPI;
+using Unity.Netcode;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ public class UnitBase : NetworkBehaviour
     #region Server
 
 #if UNITY_SERVER
-    public override void NetworkStart()
+    public override void OnNetworkSpawn()
     {
         if (IsServer)
         {
@@ -24,16 +24,17 @@ public class UnitBase : NetworkBehaviour
             ServerOnBaseSpawnend?.Invoke(this);
         }
 
-        base.NetworkStart();
+        base.OnNetworkSpawn();
     }
 
-    private void OnDestroy()
+    public override void OnNetworkDespawn()
     {
         if (IsServer)
         {
             ServerOnBaseDespawned?.Invoke(this);
             health.ServerOnDie -= ServerHandleDeath;
         }
+        base.OnNetworkDespawn();
     }
 #endif
 

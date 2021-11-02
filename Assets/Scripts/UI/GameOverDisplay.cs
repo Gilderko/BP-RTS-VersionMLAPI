@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using MLAPI;
+using Unity.Netcode;
 
 public class GameOverDisplay : MonoBehaviour
 {
@@ -26,11 +26,11 @@ public class GameOverDisplay : MonoBehaviour
     {
         if (NetworkManager.Singleton.IsServer)
         {
-            NetworkManager.Singleton.StopServer();
+            NetworkManager.Singleton.Shutdown();
         }
         else if (NetworkManager.Singleton.IsClient)
         {
-            NetworkManager.Singleton.StopClient();
+            NetworkManager.Singleton.Shutdown();
         }        
     }
 

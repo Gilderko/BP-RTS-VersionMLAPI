@@ -1,5 +1,4 @@
-using MLAPI;
-using MLAPI.Messaging;
+using Unity.Netcode;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,7 +15,7 @@ public class GameOverHandler : NetworkBehaviour
     #region Server
 
 #if UNITY_SERVER
-    public override void NetworkStart()
+    public override void OnNetworkSpawn()
     {
         if (IsServer)
         {
@@ -24,16 +23,17 @@ public class GameOverHandler : NetworkBehaviour
             UnitBase.ServerOnBaseDespawned += ServerHandleBaseDespawned;
         }
 
-        base.NetworkStart();
+        base.OnNetworkSpawn();
     }
 
-    private void OnDestroy()
+    public override void OnNetworkDespawn()
     {
         if (IsServer)
         {
             UnitBase.ServerOnBaseSpawnend -= ServerHandleBaseSpawned;
             UnitBase.ServerOnBaseDespawned -= ServerHandleBaseDespawned;
         }
+        base.OnNetworkDespawn();
     }
 #endif
 

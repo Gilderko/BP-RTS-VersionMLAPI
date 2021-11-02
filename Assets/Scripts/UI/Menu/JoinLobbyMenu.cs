@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using MLAPI;
+using Unity.Netcode;
 using UnityEngine.UI;
-using MLAPI.Transports.UNET;
+using Unity.Netcode.Transports.UNET;
 
 public class JoinLobbyMenu : MonoBehaviour
 {

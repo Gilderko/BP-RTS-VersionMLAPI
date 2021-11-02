@@ -1,4 +1,4 @@
-using MLAPI;
+using Unity.Netcode;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,7 +16,7 @@ public class ResourceGenerator : NetworkBehaviour
     #region Server
 
 #if UNITY_SERVER
-    public override void NetworkStart()
+    public override void OnNetworkSpawn()
     {
         if (IsServer)
         {
@@ -27,16 +27,17 @@ public class ResourceGenerator : NetworkBehaviour
             GameOverHandler.ServerOnGameOver += ServerHandleGameOver;
         }
 
-        base.NetworkStart();
+        base.OnNetworkSpawn();
     }
 
-    private void OnDestroy()
+    public override void OnNetworkDespawn()
     {
         if (IsServer)
         {
             health.ServerOnDie -= ServerHandleDie;
             GameOverHandler.ServerOnGameOver -= ServerHandleGameOver;
         }
+        base.OnNetworkDespawn();
     }
 
     private void Update()

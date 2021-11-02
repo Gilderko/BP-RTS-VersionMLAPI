@@ -1,12 +1,10 @@
-using MLAPI;
-using MLAPI.NetworkVariable;
+using Unity.Netcode;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
 using UnityEngine.UI;
-using MLAPI.Messaging;
 using UnityEngine.AI;
 
 public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
@@ -20,12 +18,9 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
     [SerializeField] private float spawnMoveRange = 7;
     [SerializeField] private float unitSpawnDuration = 5f;
 
-    private NetworkVariable<int> queuedUnits = new NetworkVariable<int>(
-        new NetworkVariableSettings() { WritePermission = NetworkVariablePermission.ServerOnly, ReadPermission = NetworkVariablePermission.Everyone });
+    private NetworkVariable<int> queuedUnits = new NetworkVariable<int>(NetworkVariableReadPermission.Everyone,0);
 
-    private NetworkVariable<float> unitTimer = new NetworkVariable<float>(
-        new NetworkVariableSettings() {WritePermission = NetworkVariablePermission.ServerOnly, ReadPermission = NetworkVariablePermission.Everyone });
-
+    private NetworkVariable<float> unitTimer = new NetworkVariable<float>(NetworkVariableReadPermission.Everyone,0f);
     private float progressImageVelocity;
 
     private void Update()
@@ -38,7 +33,7 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
 #endif
     }
 
-    public override void NetworkStart()
+    public override void OnNetworkSpawn()
     {
 #if UNITY_SERVER
         if (IsServer)
@@ -52,10 +47,10 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
         }
 #endif
 
-        base.NetworkStart();
+        base.OnNetworkSpawn();
     }
 
-    private void OnDestroy()
+    public override void OnNetworkDespawn()
     {
 #if UNITY_SERVER
         if (IsServer)
@@ -68,6 +63,7 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
             queuedUnits.OnValueChanged -= ClientHandleQueuedUnitsUpdated;
         }
 #endif
+        base.OnNetworkDespawn();
     }
 
 #region Server

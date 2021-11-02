@@ -1,5 +1,4 @@
-using MLAPI;
-using MLAPI.NetworkVariable;
+using Unity.Netcode;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,14 +8,13 @@ public class Health : NetworkBehaviour
 {
     [SerializeField] private int maxHealth = 100;
 
-    private NetworkVariable<int> currentHealth = new NetworkVariable<int>(
-        new NetworkVariableSettings() { WritePermission = NetworkVariablePermission.ServerOnly, ReadPermission = NetworkVariablePermission.Everyone });
+    private NetworkVariable<int> currentHealth = new NetworkVariable<int>(NetworkVariableReadPermission.Everyone, 1);
 
     public event Action ServerOnDie;
 
     public event Action<int, int> ClientOnHealthUpdated;
 
-    public override void NetworkStart()
+    public override void OnNetworkSpawn()
     {
 #if UNITY_SERVER
         if (IsServer)
@@ -30,10 +28,10 @@ public class Health : NetworkBehaviour
             currentHealth.OnValueChanged += HandeHealthUpdated;
         }
 #endif
-        base.NetworkStart();
+        base.OnNetworkSpawn();
     }
 
-    private void OnDestroy()
+    public override void OnNetworkDespawn()
     {
 #if UNITY_SERVER
         if (IsServer)
@@ -46,6 +44,7 @@ public class Health : NetworkBehaviour
             currentHealth.OnValueChanged += HandeHealthUpdated;
         }
 #endif
+        base.OnNetworkDespawn();
     }
 
 #region Server
