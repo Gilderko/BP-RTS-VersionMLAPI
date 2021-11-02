@@ -15,6 +15,7 @@ public class GameOverHandler : NetworkBehaviour
 
     #region Server
 
+#if UNITY_SERVER
     public override void NetworkStart()
     {
         if (IsServer)
@@ -34,6 +35,7 @@ public class GameOverHandler : NetworkBehaviour
             UnitBase.ServerOnBaseDespawned -= ServerHandleBaseDespawned;
         }
     }
+#endif
 
     private void ServerHandleBaseSpawned(UnitBase unitBase)
     {
@@ -56,9 +58,9 @@ public class GameOverHandler : NetworkBehaviour
         ServerOnGameOver?.Invoke();
     }
 
-    #endregion
+#endregion
 
-    #region Client
+#region Client
 
     [ClientRpc]
     private void RpcGameOverClientRpc(string winner)
@@ -66,5 +68,5 @@ public class GameOverHandler : NetworkBehaviour
         ClientOnGameOver?.Invoke(winner);
     }
 
-    #endregion
+#endregion
 }

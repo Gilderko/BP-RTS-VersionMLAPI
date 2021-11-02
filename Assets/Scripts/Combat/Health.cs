@@ -18,28 +18,37 @@ public class Health : NetworkBehaviour
 
     public override void NetworkStart()
     {
+#if UNITY_SERVER
         if (IsServer)
         {
             currentHealth.Value = maxHealth;
             UnitBase.ServerOnPlayerDie += ServerHandlePlayerDie;
         }
-        else if (IsClient)
+#else
+        if (IsClient)
         {
             currentHealth.OnValueChanged += HandeHealthUpdated;
         }
-
+#endif
         base.NetworkStart();
     }
 
     private void OnDestroy()
     {
+#if UNITY_SERVER
         if (IsServer)
         {
             UnitBase.ServerOnPlayerDie -= ServerHandlePlayerDie;
         }
+#else
+        if (IsClient)
+        {
+            currentHealth.OnValueChanged += HandeHealthUpdated;
+        }
+#endif
     }
 
-    #region Server
+#region Server
 
     private void ServerHandlePlayerDie(ulong connectionID)
     {
@@ -68,14 +77,14 @@ public class Health : NetworkBehaviour
         ServerOnDie?.Invoke();
     }
 
-    #endregion
+#endregion
 
-    #region Client
+#region Client
 
     private void HandeHealthUpdated(int oldHealth, int newHealth)
     {
         ClientOnHealthUpdated(newHealth,maxHealth);
     }
 
-    #endregion
+#endregion
 }

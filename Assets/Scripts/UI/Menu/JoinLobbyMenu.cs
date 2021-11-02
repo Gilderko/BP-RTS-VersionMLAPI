@@ -12,6 +12,7 @@ public class JoinLobbyMenu : MonoBehaviour
     [SerializeField] private TMP_InputField addressInput;
     [SerializeField] private Button joinButton;
 
+#if (UNITY_SERVER == false)
     private void OnEnable()
     {
         RTSNetworkManager.ClientOnConnected += HandleClientConnected;
@@ -23,6 +24,7 @@ public class JoinLobbyMenu : MonoBehaviour
         RTSNetworkManager.ClientOnConnected -= HandleClientConnected;
         RTSNetworkManager.ClientOnDisconnected -= HandleClientDisconnected;
     }
+#endif
 
     public void JoinCallback()
     {

@@ -24,42 +24,47 @@ public class Unit : NetworkBehaviour
 
     public override void NetworkStart()
     {
+#if UNITY_SERVER
         if (IsServer)
         {
             ServerOnUnitSpawned?.Invoke(this);
             health.ServerOnDie += ServerHandleDie;
         }
-        else if (IsOwner)
+#else
+        if (IsOwner)
         {
             AuthorityOnUnitSpawned?.Invoke(this);
         }
-
+#endif
         base.NetworkStart();
     }
 
     private void OnDestroy()
     {
+#if UNITY_SERVER
         if (IsServer)
         {
             health.ServerOnDie -= ServerHandleDie;
             ServerOnUnitDespawned?.Invoke(this);
         }
-        else if (IsOwner)
+#else
+        if (IsOwner)
         {
             AuthorityOnUnitDespawned?.Invoke(this);
         }
+#endif
     }
 
-    #region Server
+#region Server
 
     private void ServerHandleDie()
     {
         Destroy(gameObject);
     }
 
-    #endregion
+#endregion
 
-    #region Client
+#region Client
 
 
     public void Select()
@@ -82,7 +87,7 @@ public class Unit : NetworkBehaviour
         onDeselected.Invoke();
     }
 
-    #endregion
+#endregion
 
     public UnitMovement GetUnitMovement()
     {

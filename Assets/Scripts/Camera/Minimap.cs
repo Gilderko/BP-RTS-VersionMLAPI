@@ -13,6 +13,7 @@ public class Minimap : MonoBehaviour, IPointerDownHandler, IDragHandler
 
     private Transform playerCameraTransform;
 
+#if (UNITY_SERVER == false)
     private void Start()
     {
         if (NetworkManager.Singleton.IsClient)
@@ -20,6 +21,7 @@ public class Minimap : MonoBehaviour, IPointerDownHandler, IDragHandler
             playerCameraTransform = (NetworkManager.Singleton as RTSNetworkManager).GetRTSPlayerByUID(NetworkManager.Singleton.LocalClientId).GetCameraTransform();
         }
     }
+#endif
 
     private void MoveCamera()
     {
@@ -44,13 +46,11 @@ public class Minimap : MonoBehaviour, IPointerDownHandler, IDragHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("DOWN");
         MoveCamera();
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        Debug.Log("DRAG");
         MoveCamera();
     }
 }

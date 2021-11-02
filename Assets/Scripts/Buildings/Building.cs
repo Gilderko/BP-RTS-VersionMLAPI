@@ -19,28 +19,33 @@ public class Building : NetworkBehaviour
 
     public override void NetworkStart()
     {
+#if UNITY_SERVER
         if (IsServer)
         {
             ServerOnBuildingSpawned?.Invoke(this);
         }
-        else if (IsOwner)
+#else
+        if (IsOwner)
         {
             AuthorityOnBuildingSpawned?.Invoke(this);
-        }        
-
+        }
+#endif
         base.NetworkStart();
     }
 
     private void OnDestroy()
     {
+#if UNITY_SERVER
         if (IsServer)
         {
             ServerOnBuildingDespawned?.Invoke(this);
         }
-        else if (IsOwner)
+#else
+        if (IsOwner)
         {
             AuthorityOnBuildingDespawned?.Invoke(this);
         }
+#endif
     }
 
     public GameObject GetBuildingPreview()

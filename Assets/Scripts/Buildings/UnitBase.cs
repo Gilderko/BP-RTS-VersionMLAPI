@@ -15,6 +15,7 @@ public class UnitBase : NetworkBehaviour
 
     #region Server
 
+#if UNITY_SERVER
     public override void NetworkStart()
     {
         if (IsServer)
@@ -34,6 +35,7 @@ public class UnitBase : NetworkBehaviour
             health.ServerOnDie -= ServerHandleDeath;
         }
     }
+#endif
 
     private void ServerHandleDeath()
     {
@@ -43,5 +45,5 @@ public class UnitBase : NetworkBehaviour
     }
 
 
-    #endregion
+#endregion
 }

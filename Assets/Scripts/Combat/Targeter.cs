@@ -11,6 +11,7 @@ public class Targeter : NetworkBehaviour
 
     #region Server
 
+#if UNITY_SERVER
     public override void NetworkStart()
     {
         if (IsServer)
@@ -28,6 +29,7 @@ public class Targeter : NetworkBehaviour
             GameOverHandler.ServerOnGameOver -= ServerHandleGameOver;
         }
     }
+#endif
 
     private void ServerHandleGameOver()
     {
@@ -54,7 +56,7 @@ public class Targeter : NetworkBehaviour
         target = null;
     }
 
-    #endregion
+#endregion
 
     public Targetable GetTarget()
     {

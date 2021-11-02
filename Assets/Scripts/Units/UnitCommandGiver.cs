@@ -29,6 +29,7 @@ public class UnitCommandGiver : MonoBehaviour
         enabled = false;
     }
 
+#if (UNITY_SERVER == false)
     void Update()
     {
         if (!Mouse.current.rightButton.wasPressedThisFrame)
@@ -59,6 +60,7 @@ public class UnitCommandGiver : MonoBehaviour
             TryMove(hit.point);
         }        
     }
+#endif
 
     private void TryTarget(Targetable target)
     {

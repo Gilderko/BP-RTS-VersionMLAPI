@@ -21,8 +21,6 @@ public class TeamColorSetter : NetworkBehaviour
         }
         else if (IsServer)
         {
-            Debug.Log((NetworkManager.Singleton as RTSNetworkManager).GetPlayerCount());
-            Debug.Log($"Base owner is {OwnerClientId}");
             RTSPlayer player = (NetworkManager.Singleton as RTSNetworkManager).GetRTSPlayerByUID(OwnerClientId);
 
             teamColor.Value = player.GetTeamColor();

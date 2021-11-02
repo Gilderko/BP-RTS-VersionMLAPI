@@ -64,33 +64,38 @@ public class RTSPlayer : NetworkBehaviour
     {
         ((RTSNetworkManager)NetworkManager.Singleton).Players.Add(this);
 
+#if UNITY_SERVER
         if (IsServer)
         {
             OnStartServer();
         }
-        else if (IsClient)
+#else
+        if (IsClient)
         {
             OnStartAuthority();
             OnStartClient();
         }
-
+#endif
         base.NetworkStart();
     }
 
     public void OnDestroy()
     {
+#if UNITY_SERVER
         if (IsServer)
         {
             OnStopServer();
         }
-        else if (IsClient)
+#else
+        if (IsClient)
         {
             OnStopClient();
         }
+#endif
     }
 
 
-    #region Server
+#region Server
 
     public void OnStartServer()
     {
@@ -212,9 +217,9 @@ public class RTSPlayer : NetworkBehaviour
         AddResources(-buildingToPlace.GetPrice());
     }
 
-    #endregion
+#endregion
 
-    #region Client
+#region Client
 
 
     public void OnStartAuthority()
@@ -316,7 +321,7 @@ public class RTSPlayer : NetworkBehaviour
         ClientOnResourcesUpdated?.Invoke(newValue);
     }
 
-    #endregion
+#endregion
 
     public int GetResources()
     {

@@ -117,8 +117,6 @@ public class RTSNetworkManager : NetworkManager
     {
         if (Players.Count < 2) { return; }
 
-        Debug.Log("Server staring game");
-
         isGameInProgress = true;
 
         NetworkSceneManager.SwitchScene("Scene_Map");
@@ -135,10 +133,5 @@ public class RTSNetworkManager : NetworkManager
     public int GetPlayerCount()
     {
         return Players.Count;
-    }
-
-    public void Update()
-    {
-        Debug.Log(Players.Count());
     }
 }

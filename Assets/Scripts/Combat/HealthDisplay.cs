@@ -10,6 +10,7 @@ public class HealthDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     [SerializeField] private GameObject healthBarParent = null;
     [SerializeField] private Image healthBarImage = null;
 
+#if (UNITY_SERVER == false)
     private void Awake()
     {
         health.ClientOnHealthUpdated += HandleHealthUpdated;
@@ -19,6 +20,7 @@ public class HealthDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         health.ClientOnHealthUpdated -= HandleHealthUpdated;
     }
+#endif
 
     private void HandleHealthUpdated(int current, int max)
     {

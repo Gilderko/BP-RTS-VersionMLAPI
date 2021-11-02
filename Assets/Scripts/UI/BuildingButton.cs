@@ -23,6 +23,7 @@ public class BuildingButton : MonoBehaviour, IPointerClickHandler
     private GameObject buildingPreviewInstance;
     private Renderer buildingRendererInstance;
 
+#if (UNITY_SERVER == false)
     private void Start()
     {
         mainCamera = Camera.main;
@@ -45,6 +46,7 @@ public class BuildingButton : MonoBehaviour, IPointerClickHandler
 
         UpdateBuildingPreview();
     }
+#endif
 
     private void UpdateBuildingPreview()
     {

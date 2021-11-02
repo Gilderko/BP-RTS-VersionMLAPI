@@ -30,39 +30,47 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
 
     private void Update()
     {
-        if (IsServer)
-        {
-            ProduceUnits();
-        }
-        if (IsClient)
-        {
-            UpdateTimerDisplay();
-        }        
+#if UNITY_SERVER       
+        
+        ProduceUnits();        
+#else
+        UpdateTimerDisplay();
+#endif
     }
 
     public override void NetworkStart()
     {
+#if UNITY_SERVER
         if (IsServer)
         {
             health.ServerOnDie += ServerHandleDie;
         }
-        else if (IsClient)
+#else
+        if (IsClient)
         {
             queuedUnits.OnValueChanged += ClientHandleQueuedUnitsUpdated;
         }
+#endif
 
         base.NetworkStart();
     }
 
     private void OnDestroy()
     {
+#if UNITY_SERVER
         if (IsServer)
         {
             health.ServerOnDie -= ServerHandleDie;
         }
+#else
+        if (IsClient)
+        {
+            queuedUnits.OnValueChanged -= ClientHandleQueuedUnitsUpdated;
+        }
+#endif
     }
 
-    #region Server
+#region Server
 
     private void ServerHandleDie()
     {
@@ -111,9 +119,9 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
         unitTimer.Value = 0.0f;
     }
 
-    #endregion
+#endregion
 
-    #region Client
+#region Client
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -144,5 +152,5 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
             unitProgressImage.fillAmount = Mathf.SmoothDamp(unitProgressImage.fillAmount, newProgress, ref progressImageVelocity, 0.1f);
         }
     }
-    #endregion
+#endregion
 }

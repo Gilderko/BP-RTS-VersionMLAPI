@@ -15,6 +15,7 @@ public class ResourceGenerator : NetworkBehaviour
 
     #region Server
 
+#if UNITY_SERVER
     public override void NetworkStart()
     {
         if (IsServer)
@@ -38,6 +39,18 @@ public class ResourceGenerator : NetworkBehaviour
         }
     }
 
+    private void Update()
+    {
+        timer -= Time.deltaTime;
+
+        if (timer <= 0)
+        {
+            player.AddResources(resourcesPerInterval);
+            timer += interval;
+        }
+    }
+#endif
+
     private void ServerHandleGameOver()
     {
         enabled = false;
@@ -47,20 +60,5 @@ public class ResourceGenerator : NetworkBehaviour
     {
         Destroy(gameObject);
     }
- 
-    private void Update()
-    {
-        if (IsServer)
-        {
-            timer -= Time.deltaTime;
-
-            if (timer <= 0)
-            {
-                player.AddResources(resourcesPerInterval);
-                timer += interval;
-            }
-        }        
-    }
-
-    #endregion
+#endregion
 }

@@ -53,14 +53,14 @@ public class UnitMovement : NetworkBehaviour
         NavMeshHit hit;
         if (!NavMesh.SamplePosition(position, out hit, 1f, NavMesh.AllAreas))
         {
-            Debug.Log("Failed to find position");
+
             return;
         }
 
-        Debug.Log($"Destination stated {position}");
         agent.SetDestination(position);
     }
 
+#if UNITY_SERVER == false
     private void Update()
     {
         if (IsClient)
@@ -88,7 +88,6 @@ public class UnitMovement : NetworkBehaviour
                 agent.ResetPath();
             }
         }        
-    }  
-
-    
+    }
+#endif
 }
