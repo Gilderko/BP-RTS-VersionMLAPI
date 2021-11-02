@@ -19,33 +19,36 @@ public class Building : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-#if UNITY_SERVER
-        if (IsServer)
+        Debug.Log("Building networkspawn");
+
+        Debug.Log("Building networkspawn server");
+        if (NetworkManager.Singleton.IsServer)
         {
+            Debug.Log("Building spawned on server");
             ServerOnBuildingSpawned?.Invoke(this);
         }
-#else
+
         if (IsOwner)
         {
             AuthorityOnBuildingSpawned?.Invoke(this);
         }
-#endif
+
         base.OnNetworkSpawn();
     }
 
     public override void OnNetworkDespawn()
     {
-#if UNITY_SERVER
+
         if (IsServer)
         {
             ServerOnBuildingDespawned?.Invoke(this);
         }
-#else
+
         if (IsOwner)
         {
             AuthorityOnBuildingDespawned?.Invoke(this);
         }
-#endif
+
         base.OnNetworkDespawn();
     }
 

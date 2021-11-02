@@ -15,7 +15,7 @@ public class UnitBase : NetworkBehaviour
 
     #region Server
 
-#if UNITY_SERVER
+
     public override void OnNetworkSpawn()
     {
         if (IsServer)
@@ -36,7 +36,7 @@ public class UnitBase : NetworkBehaviour
         }
         base.OnNetworkDespawn();
     }
-#endif
+
 
     private void ServerHandleDeath()
     {

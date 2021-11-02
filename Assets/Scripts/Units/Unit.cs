@@ -20,39 +20,39 @@ public class Unit : NetworkBehaviour
     public static event Action<Unit> ServerOnUnitDespawned;
 
     public static event Action<Unit> AuthorityOnUnitSpawned;
-    public static event Action<Unit> AuthorityOnUnitDespawned;    
+    public static event Action<Unit> AuthorityOnUnitDespawned;
 
     public override void OnNetworkSpawn()
     {
-#if UNITY_SERVER
+
         if (IsServer)
         {
             ServerOnUnitSpawned?.Invoke(this);
             health.ServerOnDie += ServerHandleDie;
         }
-#else
+
         if (IsOwner)
         {
             AuthorityOnUnitSpawned?.Invoke(this);
         }
-#endif
+
         base.OnNetworkSpawn();
     }
 
     public override void OnNetworkDespawn()
-    {
-#if UNITY_SERVER
+    { 
+
         if (IsServer)
         {
             health.ServerOnDie -= ServerHandleDie;
             ServerOnUnitDespawned?.Invoke(this);
         }
-#else
+
         if (IsOwner)
         {
             AuthorityOnUnitDespawned?.Invoke(this);
         }
-#endif
+
         base.OnNetworkDespawn();
     }
 

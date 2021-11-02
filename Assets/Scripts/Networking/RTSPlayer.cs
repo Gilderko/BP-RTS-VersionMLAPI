@@ -55,34 +55,34 @@ public class RTSPlayer : NetworkBehaviour
     {
         ((RTSNetworkManager)NetworkManager.Singleton).Players.Add(this);
 
-#if UNITY_SERVER
+
         if (IsServer)
         {
             OnStartServer();
         }
-#else
+
         if (IsClient)
         {
             OnStartAuthority();
             OnStartClient();
         }
-#endif
+
         base.OnNetworkSpawn();
     }
 
     public override void OnNetworkDespawn()
     {
-#if UNITY_SERVER
+
         if (IsServer)
         {
             OnStopServer();
         }
-#else
+
         if (IsClient)
         {
             OnStopClient();
         }
-#endif
+
         base.OnNetworkDespawn();
     }
 
@@ -111,8 +111,10 @@ public class RTSPlayer : NetworkBehaviour
 
     private void ServerHandleBuildingSpawned(Building building)
     {
+        Debug.Log("Handling spawning");
         if (building.OwnerClientId != OwnerClientId) { return; }
 
+        Debug.Log("Addding to my buildings");
         myBuildings.Add(building);
     }
 
@@ -199,6 +201,7 @@ public class RTSPlayer : NetworkBehaviour
 
         if (!CanPlaceBuilding(buildingCollider, positionToSpawn))
         {
+            Debug.Log("Server says I cant place building");
             return;
         }
 
@@ -212,7 +215,6 @@ public class RTSPlayer : NetworkBehaviour
 #endregion
 
 #region Client
-
 
     public void OnStartAuthority()
     {
@@ -338,19 +340,20 @@ public class RTSPlayer : NetworkBehaviour
             Quaternion.identity,
             buildingBlockCollisionLayer))
         {
+            Debug.Log("Collision problem");
             return false;
         }
 
         RaycastHit[] hits = Physics.SphereCastAll(positionToSpawn, buildingFromEnemyLimit, Vector3.up, buildingKeepDistanceLayer);
         foreach (RaycastHit hit in hits)
         {
-            Unit possibleUnit = hit.transform.GetComponent<Unit>();
-            
+            Unit possibleUnit = hit.transform.GetComponent<Unit>();            
             if (possibleUnit != null)
             {                
                 bool hasAuth = IsClient ? possibleUnit.IsOwner : possibleUnit.OwnerClientId == OwnerClientId;
                 if (!hasAuth)
                 {
+                    Debug.Log("Too close to enemy unit");
                     return false;
                 }
             }
@@ -361,6 +364,7 @@ public class RTSPlayer : NetworkBehaviour
                 bool hasAuth = IsClient ? possibleBuilding.IsOwner : possibleBuilding.OwnerClientId == OwnerClientId;
                 if (!hasAuth)
                 {
+                    Debug.Log("Too close to enemy building");
                     return false;
                 }
             }
@@ -370,10 +374,12 @@ public class RTSPlayer : NetworkBehaviour
         {
             if ((positionToSpawn - build.transform.position).sqrMagnitude <= buildingRangeLimit * buildingRangeLimit)
             {
+                Debug.Log("Close enough to my buildings");
                 return true;
             }
         }
 
+        Debug.Log("Not close enough to my buildings");
         return false;
     }
 

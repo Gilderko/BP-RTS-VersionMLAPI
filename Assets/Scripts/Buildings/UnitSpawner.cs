@@ -25,44 +25,44 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
 
     private void Update()
     {
-#if UNITY_SERVER       
+    
         
         ProduceUnits();        
-#else
+
         UpdateTimerDisplay();
-#endif
+
     }
 
     public override void OnNetworkSpawn()
     {
-#if UNITY_SERVER
+
         if (IsServer)
         {
             health.ServerOnDie += ServerHandleDie;
         }
-#else
+
         if (IsClient)
         {
             queuedUnits.OnValueChanged += ClientHandleQueuedUnitsUpdated;
         }
-#endif
+
 
         base.OnNetworkSpawn();
     }
 
     public override void OnNetworkDespawn()
     {
-#if UNITY_SERVER
+
         if (IsServer)
         {
             health.ServerOnDie -= ServerHandleDie;
         }
-#else
+
         if (IsClient)
         {
             queuedUnits.OnValueChanged -= ClientHandleQueuedUnitsUpdated;
         }
-#endif
+
         base.OnNetworkDespawn();
     }
 

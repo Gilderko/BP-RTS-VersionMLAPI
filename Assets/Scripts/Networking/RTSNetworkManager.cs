@@ -1,20 +1,25 @@
 using Unity.Netcode;
-using Unity.Netcode.Editor;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(NetworkManagerAdditionalData))]
 public class RTSNetworkManager : NetworkManager
 {
-    public int value = 5;
-
     public static event System.Action ClientOnConnected;
     public static event System.Action ClientOnDisconnected;
 
     public List<RTSPlayer> Players { get; } = new List<RTSPlayer>();
 
     private bool isGameInProgress = false;
+    private NetworkManagerAdditionalData additionalData;   
+
+    private void Awake()
+    {
+        additionalData = GetComponent<NetworkManagerAdditionalData>();
+    }
 
     private void Start()
     {        
@@ -25,45 +30,44 @@ public class RTSNetworkManager : NetworkManager
 
     private void ConfigureNetworkSceneManager()
     {
-        SceneManager.OnSceneEvent += OnServerSceneChanged;
+        SceneManager.OnLoadEventCompleted += OnServerSceneChanged;
     }
 
-    private void OnServerSceneChanged(SceneEvent sceneEvent)
+    private void OnServerSceneChanged(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
     {
-        if (IsServer)
+        if (sceneName != "Scene_Map")
         {
-            if (sceneEvent.SceneName.StartsWith("Scene_Map"))
+            return;
+        }
+
+        GameOverHandler gameOverHandlerInstance = Instantiate(additionalData.GetGameOverHandlerPrefab());
+        gameOverHandlerInstance.GetComponent<NetworkObject>().Spawn();
+
+        Transform parentToSpawnPoints = GameObject.FindGameObjectWithTag("SpawnPoints").transform;
+
+        List<int> occupiedIndexes = new List<int>();
+
+        foreach (RTSPlayer player in Players)
+        {
+            int index = 0;
+
+            while (true)
             {
-                //GameOverHandler gameOverHandlerInstance = Instantiate(gameOverHandler);         
-                //gameOverHandlerInstance.GetComponent<NetworkObject>().Spawn();
+                index = Random.Range(0, parentToSpawnPoints.childCount);
+                if (!occupiedIndexes.Contains(index))
 
-                Transform parentToSpawnPoints = GameObject.FindGameObjectWithTag("SpawnPoints").transform;
-
-                List<int> occupiedIndexes = new List<int>();
-
-                foreach (RTSPlayer player in Players)
-                {
-                    int index = 0;
-
-                    while (true)
-                    {
-                        index = Random.Range(0, parentToSpawnPoints.childCount);
-                        if (!occupiedIndexes.Contains(index))
-
-                            occupiedIndexes.Add(index);
-                        break;
-                    }                    
-
-                    /*GameObject baseInstance = Instantiate(playerBase, parentToSpawnPoints.GetChild(index).position, Quaternion.identity);
-
-                    Debug.Log(player.OwnerClientId);
-
-                    baseInstance.GetComponent<NetworkObject>().SpawnWithOwnership(player.OwnerClientId);                   
-
-                    player.ChangeStartingPosition(baseInstance.transform.position);*/
-                }
+                    occupiedIndexes.Add(index);
+                break;
             }
-        }       
+
+            UnitBase baseInstance = Instantiate(additionalData.GetUnitBasePrefab(), parentToSpawnPoints.GetChild(index).position, Quaternion.identity);
+
+            Debug.Log(player.OwnerClientId);
+
+            baseInstance.GetComponent<NetworkObject>().SpawnWithOwnership(player.OwnerClientId);
+
+            player.ChangeStartingPosition(baseInstance.transform.position);
+        }
     }
 
     private void HandleClientDisconnected(ulong obj)
@@ -117,6 +121,7 @@ public class RTSNetworkManager : NetworkManager
 
     public void StartGame()
     {
+        Debug.Log("StartGame");
         if (Players.Count < 2) { return; }
 
         isGameInProgress = true;

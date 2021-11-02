@@ -48,7 +48,7 @@ public class UnitSelectionHandler : MonoBehaviour
         selectedUnits.Remove(unit);
     }
 
-#if (UNITY_SERVER == false)
+
     private void Update()
     {
         if (!NetworkManager.Singleton.IsConnectedClient)
@@ -70,7 +70,6 @@ public class UnitSelectionHandler : MonoBehaviour
             UpdateSelectionArea();
         }
     }
-#endif
 
     private void StartSelectionArea()
     {

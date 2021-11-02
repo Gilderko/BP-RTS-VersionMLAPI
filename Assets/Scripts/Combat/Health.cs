@@ -16,34 +16,34 @@ public class Health : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-#if UNITY_SERVER
+
         if (IsServer)
         {
             currentHealth.Value = maxHealth;
             UnitBase.ServerOnPlayerDie += ServerHandlePlayerDie;
         }
-#else
+
         if (IsClient)
         {
             currentHealth.OnValueChanged += HandeHealthUpdated;
         }
-#endif
+
         base.OnNetworkSpawn();
     }
 
     public override void OnNetworkDespawn()
     {
-#if UNITY_SERVER
+
         if (IsServer)
         {
             UnitBase.ServerOnPlayerDie -= ServerHandlePlayerDie;
         }
-#else
+
         if (IsClient)
         {
             currentHealth.OnValueChanged += HandeHealthUpdated;
         }
-#endif
+
         base.OnNetworkDespawn();
     }
 

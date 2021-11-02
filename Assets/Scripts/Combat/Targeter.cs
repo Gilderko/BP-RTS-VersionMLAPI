@@ -10,7 +10,7 @@ public class Targeter : NetworkBehaviour
 
     #region Server
 
-#if UNITY_SERVER
+
     public override void OnNetworkSpawn()
     {
         if (IsServer)
@@ -29,7 +29,7 @@ public class Targeter : NetworkBehaviour
         }
         base.OnNetworkDespawn();
     }
-#endif
+
 
     private void ServerHandleGameOver()
     {

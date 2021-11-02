@@ -15,7 +15,7 @@ public class ResourceGenerator : NetworkBehaviour
 
     #region Server
 
-#if UNITY_SERVER
+
     public override void OnNetworkSpawn()
     {
         if (IsServer)
@@ -50,7 +50,7 @@ public class ResourceGenerator : NetworkBehaviour
             timer += interval;
         }
     }
-#endif
+
 
     private void ServerHandleGameOver()
     {

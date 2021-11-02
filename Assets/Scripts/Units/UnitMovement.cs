@@ -32,21 +32,9 @@ public class UnitMovement : NetworkBehaviour
         base.OnNetworkDespawn();
     }
 
-    #endregion
-
-    [ClientRpc]
-    private void ServerHandleGameOverClientRpc()
+    [ServerRpc]
+    public void CmdMoveServerRpc(Vector3 position)
     {
-        agent.ResetPath();
-    }
-
-    public void MoveClient(Vector3 position)
-    {
-        if (!IsOwner)
-        {
-            return;
-        }
-
         targeter.ClearTarget();
 
         NavMeshHit hit;
@@ -59,10 +47,17 @@ public class UnitMovement : NetworkBehaviour
         agent.SetDestination(position);
     }
 
-#if UNITY_SERVER == false
+    #endregion
+
+    [ClientRpc]
+    private void ServerHandleGameOverClientRpc()
+    {
+        agent.ResetPath();
+    }    
+
     private void Update()
     {
-        if (IsClient)
+        if (IsServer)
         {
             Targetable target = targeter.GetTarget();
 
@@ -88,5 +83,5 @@ public class UnitMovement : NetworkBehaviour
             }
         }        
     }
-#endif
+
 }

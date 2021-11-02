@@ -10,7 +10,7 @@ public class GameOverDisplay : MonoBehaviour
     [SerializeField] private GameObject gameOverUIParent = null;
     [SerializeField] private TextMeshProUGUI winnerText = null;
 
-#if (UNITY_SERVER == false)
+
     private void Start()
     {
         GameOverHandler.ClientOnGameOver += ClientHandleGameOver;
@@ -20,7 +20,7 @@ public class GameOverDisplay : MonoBehaviour
     {
         GameOverHandler.ClientOnGameOver -= ClientHandleGameOver;
     }
-#endif
+
 
     public void LeaveGame()
     {

@@ -16,7 +16,7 @@ public class UnitFiring : NetworkBehaviour
 
     #region Server
 
-#if UNITY_SERVER
+
     private void Update()
     {
         if (IsServer)
@@ -49,7 +49,6 @@ public class UnitFiring : NetworkBehaviour
             }
         }        
     }
-#endif
 
     private bool CanFireAtTarget()
     {

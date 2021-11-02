@@ -14,7 +14,7 @@ public class GameOverHandler : NetworkBehaviour
 
     #region Server
 
-#if UNITY_SERVER
+
     public override void OnNetworkSpawn()
     {
         if (IsServer)
@@ -35,7 +35,7 @@ public class GameOverHandler : NetworkBehaviour
         }
         base.OnNetworkDespawn();
     }
-#endif
+
 
     private void ServerHandleBaseSpawned(UnitBase unitBase)
     {

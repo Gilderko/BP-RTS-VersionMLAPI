@@ -23,7 +23,7 @@ public class CameraController : NetworkBehaviour
 
     #region Client
 
-#if (UNITY_SERVER == false)
+
     private void Update()
     {
         if (!IsLocalPlayer || !Application.isFocused)
@@ -33,7 +33,7 @@ public class CameraController : NetworkBehaviour
 
         UpdateCameraPosition();
     }
-#endif
+
 
     private void UpdateCameraPosition()
     {
