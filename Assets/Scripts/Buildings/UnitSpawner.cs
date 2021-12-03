@@ -109,7 +109,14 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
 
         GameObject spawnedUnit = Instantiate(unitPrefab.gameObject, spawnLocation.position, spawnLocation.rotation);
 
-        spawnedUnit.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);        
+        spawnedUnit.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId, true);
+
+        Vector3 spawnOffset = Random.insideUnitSphere * spawnMoveRange;
+        spawnOffset.y = spawnLocation.position.y;
+
+        UnitMovement unitMovement = spawnedUnit.GetComponent<UnitMovement>();
+        unitMovement.ServerMove(spawnOffset + spawnLocation.position);
+
 
         queuedUnits.Value--;
         unitTimer.Value = 0.0f;

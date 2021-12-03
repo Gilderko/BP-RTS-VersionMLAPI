@@ -207,7 +207,7 @@ public class RTSPlayer : NetworkBehaviour
 
         GameObject building = Instantiate(buildingToPlace.gameObject, positionToSpawn, Quaternion.identity);
         
-        building.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
+        building.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId, true);
 
         AddResources(-buildingToPlace.GetPrice());
     }

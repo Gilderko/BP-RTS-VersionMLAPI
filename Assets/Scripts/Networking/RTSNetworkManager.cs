@@ -17,7 +17,7 @@ public class RTSNetworkManager : NetworkManager
     private NetworkManagerAdditionalData additionalData;   
 
     private void Awake()
-    {
+    {        
         additionalData = GetComponent<NetworkManagerAdditionalData>();
     }
 
@@ -41,7 +41,7 @@ public class RTSNetworkManager : NetworkManager
         }
 
         GameOverHandler gameOverHandlerInstance = Instantiate(additionalData.GetGameOverHandlerPrefab());
-        gameOverHandlerInstance.GetComponent<NetworkObject>().Spawn();
+        gameOverHandlerInstance.GetComponent<NetworkObject>().Spawn(true);
 
         Transform parentToSpawnPoints = GameObject.FindGameObjectWithTag("SpawnPoints").transform;
 
@@ -64,7 +64,7 @@ public class RTSNetworkManager : NetworkManager
 
             Debug.Log(player.OwnerClientId);
 
-            baseInstance.GetComponent<NetworkObject>().SpawnWithOwnership(player.OwnerClientId);
+            baseInstance.GetComponent<NetworkObject>().SpawnWithOwnership(player.OwnerClientId, true);
 
             player.ChangeStartingPosition(baseInstance.transform.position);
         }

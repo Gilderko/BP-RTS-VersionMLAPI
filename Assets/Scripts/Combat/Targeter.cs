@@ -41,6 +41,11 @@ public class Targeter : NetworkBehaviour
     {
         var targetGameObject = NetworkManager.ConnectedClients[playerID].OwnedObjects.Find(obj => obj.NetworkObjectId == instanceID);
 
+        if (targetGameObject == null)
+        {
+            return;
+        }
+
         Targetable newTarget;
 
         if (!targetGameObject.TryGetComponent<Targetable>(out newTarget))

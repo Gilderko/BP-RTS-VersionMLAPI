@@ -43,7 +43,7 @@ public class UnitFiring : NetworkBehaviour
 
                 GameObject projectileInstance = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectRotation);                
                 
-                projectileInstance.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
+                projectileInstance.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId, true);
 
                 lastFireTime = Time.time;
             }

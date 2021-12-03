@@ -28,12 +28,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8526479403188329863}
     - target: {fileID: 2937095489845318159, guid: 4b3e5a13853b6ee44b2e86e4aa1190e1, type: 3}
+      propertyPath: icon
+      value: 
+      objectReference: {fileID: 21300014, guid: 56d84991286850f428b4e7df0cca7380, type: 3}
+    - target: {fileID: 2937095489845318159, guid: 4b3e5a13853b6ee44b2e86e4aa1190e1, type: 3}
       propertyPath: price
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 2937095489845318159, guid: 4b3e5a13853b6ee44b2e86e4aa1190e1, type: 3}
       propertyPath: buildingID
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2937095489845318159, guid: 4b3e5a13853b6ee44b2e86e4aa1190e1, type: 3}
+      propertyPath: buildingName
+      value: Jeep spawner
       objectReference: {fileID: 0}
     - target: {fileID: 2937095489845318159, guid: 4b3e5a13853b6ee44b2e86e4aa1190e1, type: 3}
       propertyPath: buildingPreview
@@ -106,6 +114,10 @@ PrefabInstance:
     - target: {fileID: 6810589153410532229, guid: 4b3e5a13853b6ee44b2e86e4aa1190e1, type: 3}
       propertyPath: PrefabHash
       value: 10120740771415159021
+      objectReference: {fileID: 0}
+    - target: {fileID: 6810589153410532229, guid: 4b3e5a13853b6ee44b2e86e4aa1190e1, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 951099334
       objectReference: {fileID: 0}
     - target: {fileID: 6810589153410532229, guid: 4b3e5a13853b6ee44b2e86e4aa1190e1, type: 3}
       propertyPath: PrefabHashGenerator

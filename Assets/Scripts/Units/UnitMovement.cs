@@ -35,12 +35,16 @@ public class UnitMovement : NetworkBehaviour
     [ServerRpc]
     public void CmdMoveServerRpc(Vector3 position)
     {
+        ServerMove(position);
+    }
+
+    public void ServerMove(Vector3 position)
+    {
         targeter.ClearTarget();
 
         NavMeshHit hit;
         if (!NavMesh.SamplePosition(position, out hit, 1f, NavMesh.AllAreas))
         {
-
             return;
         }
 
