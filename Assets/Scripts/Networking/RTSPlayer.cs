@@ -46,10 +46,10 @@ public class RTSPlayer : NetworkBehaviour
     private Color teamColor = new Color();
 
     [SerializeField] 
-    private List<Unit> myUnits = new List<Unit>();
+    private HashSet<Unit> myUnits = new HashSet<Unit>();
 
     [SerializeField] 
-    private List<Building> myBuildings = new List<Building>();
+    private HashSet<Building> myBuildings = new HashSet<Building>();
 
     public override void OnNetworkSpawn()
     {

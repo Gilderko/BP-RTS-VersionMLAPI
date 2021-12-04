@@ -83,7 +83,7 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
 
         RTSPlayer player = (NetworkManager.Singleton as RTSNetworkManager).GetRTSPlayerByUID(OwnerClientId);
 
-        if (player.GetResources() < unitPrefab.GetResourceCost())
+        if (player == null && player.GetResources() < unitPrefab.GetResourceCost())
         {
             return;
         }

@@ -45,7 +45,7 @@ public class RTSNetworkManager : NetworkManager
 
         Transform parentToSpawnPoints = GameObject.FindGameObjectWithTag("SpawnPoints").transform;
 
-        List<int> occupiedIndexes = new List<int>();
+        HashSet<int> occupiedIndexes = new HashSet<int>();
 
         foreach (RTSPlayer player in Players)
         {
