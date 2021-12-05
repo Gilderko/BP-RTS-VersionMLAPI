@@ -16,7 +16,7 @@ public class MainMenu : MonoBehaviour
     
     public void HostServerCallback()
     {
-        Debug.Log("Started server");
+        //Debug.Log("Started server");
         landingPagePanel.SetActive(false);
 
         NetworkManager.Singleton.StartServer();

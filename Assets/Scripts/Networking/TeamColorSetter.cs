@@ -9,8 +9,6 @@ public class TeamColorSetter : NetworkBehaviour
 
     private NetworkVariable<Color> teamColor = new NetworkVariable<Color>(NetworkVariableReadPermission.Everyone, new Color());
 
-    #region Server
-
     public override void OnNetworkSpawn()
     {
         if (IsClient)
@@ -26,8 +24,6 @@ public class TeamColorSetter : NetworkBehaviour
 
         base.OnNetworkSpawn();
     }
-
-    #endregion
 
     #region Client
 

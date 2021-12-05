@@ -20,12 +20,12 @@ public class Building : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        Debug.Log("Building networkspawn");
+        //Debug.Log("Building networkspawn");
 
-        Debug.Log("Building networkspawn server");
-        if (NetworkManager.Singleton.IsServer)
+        //Debug.Log("Building networkspawn server");
+        if (IsServer)
         {
-            Debug.Log("Building spawned on server");
+            //Debug.Log("Building spawned on server");
             ServerOnBuildingSpawned?.Invoke(this);
         }
 

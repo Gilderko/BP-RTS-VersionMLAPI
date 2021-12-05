@@ -62,7 +62,7 @@ public class RTSNetworkManager : NetworkManager
 
             UnitBase baseInstance = Instantiate(additionalData.GetUnitBasePrefab(), parentToSpawnPoints.GetChild(index).position, Quaternion.identity);
 
-            Debug.Log(player.OwnerClientId);
+            //Debug.Log(player.OwnerClientId);
 
             baseInstance.GetComponent<NetworkObject>().SpawnWithOwnership(player.OwnerClientId, true);
 
@@ -121,7 +121,7 @@ public class RTSNetworkManager : NetworkManager
 
     public void StartGame()
     {
-        Debug.Log("StartGame");
+        //Debug.Log("StartGame");
         if (Players.Count < 2) { return; }
 
         isGameInProgress = true;

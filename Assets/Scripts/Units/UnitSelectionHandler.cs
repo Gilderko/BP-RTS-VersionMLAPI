@@ -25,7 +25,7 @@ public class UnitSelectionHandler : MonoBehaviour
 
         if (NetworkManager.Singleton.IsConnectedClient)
         {
-            Debug.Log($"Selection handler looking for {NetworkManager.Singleton.LocalClientId}");
+            //Debug.Log($"Selection handler looking for {NetworkManager.Singleton.LocalClientId}");
             player = (NetworkManager.Singleton as RTSNetworkManager).GetRTSPlayerByUID(NetworkManager.Singleton.LocalClientId);
         }
 
@@ -66,7 +66,6 @@ public class UnitSelectionHandler : MonoBehaviour
         }
         else if (Mouse.current.leftButton.isPressed)
         {
-            Debug.Log("Is pressed");    
             UpdateSelectionArea();
         }
     }
@@ -138,7 +137,7 @@ public class UnitSelectionHandler : MonoBehaviour
             Vector2 min = unitSelectionArea.anchoredPosition - unitSelectionArea.sizeDelta / 2;
             Vector2 max = unitSelectionArea.anchoredPosition + unitSelectionArea.sizeDelta / 2;
 
-            Debug.Log($"You have amount of units {player.GetMyUnits().Count()}");
+            //Debug.Log($"You have amount of units {player.GetMyUnits().Count()}");
 
             foreach(Unit unit in player.GetMyUnits())
             {

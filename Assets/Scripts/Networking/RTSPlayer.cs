@@ -111,10 +111,10 @@ public class RTSPlayer : NetworkBehaviour
 
     private void ServerHandleBuildingSpawned(Building building)
     {
-        Debug.Log("Handling spawning");
+        //Debug.Log("Handling spawning");
         if (building.OwnerClientId != OwnerClientId) { return; }
 
-        Debug.Log("Addding to my buildings");
+        //Debug.Log("Addding to my buildings");
         myBuildings.Add(building);
     }
 
@@ -172,8 +172,8 @@ public class RTSPlayer : NetworkBehaviour
     [ServerRpc]
     public void CmdStartGameServerRpc()
     {
-        Debug.Log(isPartyOwner.Value);
-        Debug.Log("Server RPC Start game");
+        //Debug.Log(isPartyOwner.Value);
+        //Debug.Log("Server RPC Start game");
         if (!isPartyOwner.Value) 
         { 
             return; 
@@ -201,7 +201,7 @@ public class RTSPlayer : NetworkBehaviour
 
         if (!CanPlaceBuilding(buildingCollider, positionToSpawn))
         {
-            Debug.Log("Server says I cant place building");
+            //Debug.Log("Server says I cant place building");
             return;
         }
 
@@ -340,7 +340,7 @@ public class RTSPlayer : NetworkBehaviour
             Quaternion.identity,
             buildingBlockCollisionLayer))
         {
-            Debug.Log("Collision problem");
+            //Debug.Log("Collision problem");
             return false;
         }
 
@@ -353,7 +353,7 @@ public class RTSPlayer : NetworkBehaviour
                 bool hasAuth = IsClient ? possibleUnit.IsOwner : possibleUnit.OwnerClientId == OwnerClientId;
                 if (!hasAuth)
                 {
-                    Debug.Log("Too close to enemy unit");
+                    //Debug.Log("Too close to enemy unit");
                     return false;
                 }
             }
@@ -364,7 +364,7 @@ public class RTSPlayer : NetworkBehaviour
                 bool hasAuth = IsClient ? possibleBuilding.IsOwner : possibleBuilding.OwnerClientId == OwnerClientId;
                 if (!hasAuth)
                 {
-                    Debug.Log("Too close to enemy building");
+                    //Debug.Log("Too close to enemy building");
                     return false;
                 }
             }
@@ -374,12 +374,12 @@ public class RTSPlayer : NetworkBehaviour
         {
             if ((positionToSpawn - build.transform.position).sqrMagnitude <= buildingRangeLimit * buildingRangeLimit)
             {
-                Debug.Log("Close enough to my buildings");
+                //Debug.Log("Close enough to my buildings");
                 return true;
             }
         }
 
-        Debug.Log("Not close enough to my buildings");
+        //Debug.Log("Not close enough to my buildings");
         return false;
     }
 

@@ -25,12 +25,14 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
 
     private void Update()
     {
-    
-        
-        ProduceUnits();        
-
-        UpdateTimerDisplay();
-
+        if (IsServer)
+        {
+            ProduceUnits();
+        }
+        if (IsClient)
+        {
+            UpdateTimerDisplay();
+        }
     }
 
     public override void OnNetworkSpawn()
@@ -95,31 +97,34 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
 
     private void ProduceUnits()
     {
-        if (queuedUnits.Value == 0)
+        if (IsServer)
         {
-            return;
+            if (queuedUnits.Value == 0)
+            {
+                return;
+            }
+
+            unitTimer.Value += Time.deltaTime;
+
+            if (unitTimer.Value < unitSpawnDuration)
+            {
+                return;
+            }
+
+            GameObject spawnedUnit = Instantiate(unitPrefab.gameObject, spawnLocation.position, spawnLocation.rotation);
+
+            spawnedUnit.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId, true);
+
+            Vector3 spawnOffset = Random.insideUnitSphere * spawnMoveRange;
+            spawnOffset.y = spawnLocation.position.y;
+
+            UnitMovement unitMovement = spawnedUnit.GetComponent<UnitMovement>();
+            unitMovement.ServerMove(spawnOffset + spawnLocation.position);
+
+
+            queuedUnits.Value--;
+            unitTimer.Value = 0.0f;
         }
-
-        unitTimer.Value += Time.deltaTime;
-
-        if (unitTimer.Value < unitSpawnDuration)
-        {
-            return;
-        }
-
-        GameObject spawnedUnit = Instantiate(unitPrefab.gameObject, spawnLocation.position, spawnLocation.rotation);
-
-        spawnedUnit.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId, true);
-
-        Vector3 spawnOffset = Random.insideUnitSphere * spawnMoveRange;
-        spawnOffset.y = spawnLocation.position.y;
-
-        UnitMovement unitMovement = spawnedUnit.GetComponent<UnitMovement>();
-        unitMovement.ServerMove(spawnOffset + spawnLocation.position);
-
-
-        queuedUnits.Value--;
-        unitTimer.Value = 0.0f;
     }
 
 #endregion

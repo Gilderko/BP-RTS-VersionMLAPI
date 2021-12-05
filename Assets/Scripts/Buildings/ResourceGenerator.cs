@@ -42,12 +42,15 @@ public class ResourceGenerator : NetworkBehaviour
 
     private void Update()
     {
-        timer -= Time.deltaTime;
-
-        if (timer <= 0)
+        if (IsServer)
         {
-            player.AddResources(resourcesPerInterval);
-            timer += interval;
+            timer -= Time.deltaTime;
+
+            if (timer <= 0)
+            {
+                player.AddResources(resourcesPerInterval);
+                timer += interval;
+            }
         }
     }
 
