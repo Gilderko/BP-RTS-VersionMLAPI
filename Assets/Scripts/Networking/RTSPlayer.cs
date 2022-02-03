@@ -30,13 +30,17 @@ public class RTSPlayer : NetworkBehaviour
     [SerializeField]
     private Vector2 cameraStartOffset = new Vector2(-5, -5);
 
-    private NetworkVariable<int> resources = new NetworkVariable<int>(NetworkVariableReadPermission.OwnerOnly, 500);
+    private NetworkVariable<int> resources = 
+        new NetworkVariable<int>(NetworkVariableReadPermission.OwnerOnly, 500);
 
-    private NetworkVariable<bool> isPartyOwner = new NetworkVariable<bool>(NetworkVariableReadPermission.Everyone, false);
+    private NetworkVariable<bool> isPartyOwner = 
+        new NetworkVariable<bool>(NetworkVariableReadPermission.Everyone, false);
 
-    private NetworkVariable<FixedString32Bytes> playerName = new NetworkVariable<FixedString32Bytes>(NetworkVariableReadPermission.Everyone, "");
+    private NetworkVariable<FixedString32Bytes> playerName = 
+        new NetworkVariable<FixedString32Bytes>(NetworkVariableReadPermission.Everyone, "");
 
-    private NetworkVariable<Vector3> startPosition = new NetworkVariable<Vector3>(NetworkVariableReadPermission.Everyone, new Vector3(0, 0, 21));
+    private NetworkVariable<Vector3> startPosition = 
+        new NetworkVariable<Vector3>(NetworkVariableReadPermission.Everyone, new Vector3(0, 0, 21));
 
     public event Action<int> ClientOnResourcesUpdated;
 
@@ -172,8 +176,6 @@ public class RTSPlayer : NetworkBehaviour
     [ServerRpc]
     public void CmdStartGameServerRpc()
     {
-        //Debug.Log(isPartyOwner.Value);
-        //Debug.Log("Server RPC Start game");
         if (!isPartyOwner.Value) 
         { 
             return; 
