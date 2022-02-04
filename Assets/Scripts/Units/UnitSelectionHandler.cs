@@ -19,6 +19,8 @@ public class UnitSelectionHandler : MonoBehaviour
 
     [SerializeField] private HashSet<Unit> selectedUnits = new HashSet<Unit>();
 
+#if !UNITY_SERVER
+
     private void Start()
     {
         mainCamera = Camera.main;
@@ -33,21 +35,10 @@ public class UnitSelectionHandler : MonoBehaviour
         GameOverHandler.ClientOnGameOver += ClientHandleGameOver;       
     }
 
-    private void ClientHandleGameOver(string winnerName)
-    {
-        enabled = false;
-    }
-
     private void OnDestroy()
     {
         Unit.AuthorityOnUnitDespawned -= AuthorityHandleUnitDespawned;
     }
-
-    private void AuthorityHandleUnitDespawned(Unit unit)
-    {
-        selectedUnits.Remove(unit);
-    }
-
 
     private void Update()
     {
@@ -68,6 +59,18 @@ public class UnitSelectionHandler : MonoBehaviour
         {
             UpdateSelectionArea();
         }
+    }
+
+#endif
+
+    private void AuthorityHandleUnitDespawned(Unit unit)
+    {
+        selectedUnits.Remove(unit);
+    }
+
+    private void ClientHandleGameOver(string winnerName)
+    {
+        enabled = false;
     }
 
     private void StartSelectionArea()

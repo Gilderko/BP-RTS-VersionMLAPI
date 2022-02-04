@@ -12,6 +12,8 @@ public class UnitCommandGiver : MonoBehaviour
 
     private Camera mainCamera;
 
+#if !UNITY_SERVER
+
     private void Start()
     {
         mainCamera = Camera.main;
@@ -23,12 +25,6 @@ public class UnitCommandGiver : MonoBehaviour
     {
         GameOverHandler.ClientOnGameOver -= ClientHandleGameOver;
     }
-
-    private void ClientHandleGameOver(string obj)
-    {
-        enabled = false;
-    }
-
 
     void Update()
     {
@@ -59,6 +55,13 @@ public class UnitCommandGiver : MonoBehaviour
         {
             TryMove(hit.point);
         }        
+    }
+
+#endif
+
+    private void ClientHandleGameOver(string obj)
+    {
+        enabled = false;
     }
 
 

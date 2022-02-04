@@ -19,10 +19,6 @@ public class RTSNetworkManager : NetworkManager
     private void Awake()
     {        
         additionalData = GetComponent<NetworkManagerAdditionalData>();
-    }
-
-    private void Start()
-    {        
         OnClientConnectedCallback += HandleClientConnected;
         OnClientDisconnectCallback += HandleClientDisconnected;
         OnServerStarted += ConfigureNetworkSceneManager;
@@ -55,9 +51,10 @@ public class RTSNetworkManager : NetworkManager
             {
                 index = Random.Range(0, parentToSpawnPoints.childCount);
                 if (!occupiedIndexes.Contains(index))
-
+                {
                     occupiedIndexes.Add(index);
-                break;
+                    break;
+                }
             }
 
             UnitBase baseInstance = Instantiate(additionalData.GetUnitBasePrefab(), parentToSpawnPoints.GetChild(index).position, Quaternion.identity);

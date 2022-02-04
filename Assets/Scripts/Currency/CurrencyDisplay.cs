@@ -11,6 +11,7 @@ public class CurrencyDisplay : MonoBehaviour
 
     private RTSPlayer player;
 
+#if !UNITY_SERVER
 
     private void Start()
     {
@@ -27,6 +28,7 @@ public class CurrencyDisplay : MonoBehaviour
         player.ClientOnResourcesUpdated -= ClientHandleResourcesUpdated;
     }
 
+#endif
 
     private void ClientHandleResourcesUpdated(int obj)
     {

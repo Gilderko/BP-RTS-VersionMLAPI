@@ -57,7 +57,9 @@ public class UnitMovement : NetworkBehaviour
     private void ServerHandleGameOverClientRpc()
     {
         agent.ResetPath();
-    }    
+    }
+
+#if UNITY_SERVER
 
     private void Update()
     {
@@ -87,5 +89,7 @@ public class UnitMovement : NetworkBehaviour
             }
         }        
     }
+
+#endif
 
 }

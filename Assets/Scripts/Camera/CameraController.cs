@@ -23,6 +23,7 @@ public class CameraController : NetworkBehaviour
 
     #region Client
 
+#if !UNITY_SERVER
 
     private void Update()
     {
@@ -33,6 +34,8 @@ public class CameraController : NetworkBehaviour
 
         UpdateCameraPosition();
     }
+
+#endif
 
 
     private void UpdateCameraPosition()

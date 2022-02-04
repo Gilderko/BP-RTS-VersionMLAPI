@@ -40,6 +40,8 @@ public class ResourceGenerator : NetworkBehaviour
         base.OnNetworkDespawn();
     }
 
+#if UNITY_SERVER
+
     private void Update()
     {
         if (IsServer)
@@ -53,6 +55,8 @@ public class ResourceGenerator : NetworkBehaviour
             }
         }
     }
+
+#endif
 
 
     private void ServerHandleGameOver()
