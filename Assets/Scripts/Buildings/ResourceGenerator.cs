@@ -40,8 +40,8 @@ public class ResourceGenerator : NetworkBehaviour
         base.OnNetworkDespawn();
     }
 
-#if UNITY_SERVER
 
+#if UNITY_SERVER
     private void Update()
     {
         if (IsServer)
