@@ -98,6 +98,11 @@ MonoBehaviour:
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 5965902394542586050, guid: 36654cbf9b7a659469f86f6996a62ec1, type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
     TickRate: 10
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0
@@ -146,3 +151,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameOverHandler: {fileID: 1273161702178869714, guid: 51225ebfc2af578448f3b05f4bdfd2ec, type: 3}
   unitBase: {fileID: -8850996560325820486, guid: 15e90b0019d52b34d98aa4678a1a18a6, type: 3}
+  commander: {fileID: 3694272730473350459, guid: 36654cbf9b7a659469f86f6996a62ec1, type: 3}

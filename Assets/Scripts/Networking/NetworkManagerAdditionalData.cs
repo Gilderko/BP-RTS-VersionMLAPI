@@ -6,6 +6,7 @@ public class NetworkManagerAdditionalData : MonoBehaviour
 {
     [SerializeField] GameOverHandler gameOverHandler;
     [SerializeField] UnitBase unitBase;
+    [SerializeField] Commander commander;
 
     public UnitBase GetUnitBasePrefab()
     {
@@ -15,5 +16,10 @@ public class NetworkManagerAdditionalData : MonoBehaviour
     public GameOverHandler GetGameOverHandlerPrefab()
     {
         return gameOverHandler;
+    }
+
+    public Commander GetCommanderPrefab()
+    {
+        return commander;
     }
 }

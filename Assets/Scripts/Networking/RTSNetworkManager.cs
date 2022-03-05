@@ -39,6 +39,9 @@ public class RTSNetworkManager : NetworkManager
         GameOverHandler gameOverHandlerInstance = Instantiate(additionalData.GetGameOverHandlerPrefab());
         gameOverHandlerInstance.GetComponent<NetworkObject>().Spawn(true);
 
+        Commander commanderInstance = Instantiate(additionalData.GetCommanderPrefab());
+        commanderInstance.GetComponent<NetworkObject>().Spawn(true);
+
         Transform parentToSpawnPoints = GameObject.FindGameObjectWithTag("SpawnPoints").transform;
 
         HashSet<int> occupiedIndexes = new HashSet<int>();

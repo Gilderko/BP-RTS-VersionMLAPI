@@ -75,8 +75,8 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
         Destroy(gameObject);
     }
 
-    [ServerRpc]
-    private void CmdSpawnUnitServerRpc()
+    [ServerRpc(RequireOwnership = false)]
+    public void CmdSpawnUnitServerRpc()
     {
         if (queuedUnits.Value == maxUnitQue)
         {

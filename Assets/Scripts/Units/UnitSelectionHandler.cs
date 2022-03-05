@@ -160,6 +160,12 @@ public class UnitSelectionHandler : MonoBehaviour
         }        
     }
 
+    public void AddUnitToSelection(Unit unit)
+    {
+        selectedUnits.Add(unit);
+        unit.Select();
+    }
+
     public IEnumerable<Unit> GetSelectedUnits()
     {
         return selectedUnits;

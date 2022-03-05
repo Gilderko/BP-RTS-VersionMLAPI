@@ -20,6 +20,38 @@
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
+                },
+                {
+                    "name": "BuildMine",
+                    "type": "Button",
+                    "id": "2eb4b626-97af-4981-9fce-c3da060fe3e1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "BuildSpawner",
+                    "type": "Button",
+                    "id": "1fa44663-1efe-4349-a497-f1484efb3e4b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "SpawnUnit",
+                    "type": "Button",
+                    "id": "509700dc-4ad4-4645-8b42-e600e118ca0b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "SendUnits",
+                    "type": "Button",
+                    "id": "2978d7e0-bbe4-47c6-b4da-61c1354a1f2b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
                 }
             ],
             "bindings": [
@@ -141,6 +173,50 @@
                     "processors": "",
                     "groups": "",
                     "action": "Zoom Camera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "984d71de-4e59-41bf-a674-c1078a0f8d14",
+                    "path": "<Keyboard>/numpad1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & mouse",
+                    "action": "BuildMine",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fd3842d9-de47-4b27-9af9-cc80d3c202d6",
+                    "path": "<Keyboard>/numpad2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & mouse",
+                    "action": "BuildSpawner",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "04a59a05-8a16-43be-baff-38d76212a9fb",
+                    "path": "<Keyboard>/numpad3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & mouse",
+                    "action": "SpawnUnit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8ac8a8fe-c2b0-413b-9238-c464a3a81343",
+                    "path": "<Keyboard>/numpad4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard & mouse",
+                    "action": "SendUnits",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

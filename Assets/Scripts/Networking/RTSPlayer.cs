@@ -214,9 +214,18 @@ public class RTSPlayer : NetworkBehaviour
         AddResources(-buildingToPlace.GetPrice());
     }
 
-#endregion
+    [ServerRpc(RequireOwnership = false)]
+    public void MustPlaceBuildingServerRpc(int buildingId, Vector3 position)
+    {
+        Building buildingToPlace = buildings.First(build => build.GetID() == buildingId);
+        GameObject building = Instantiate(buildingToPlace.gameObject, position, Quaternion.identity);
 
-#region Client
+        building.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId, true);
+    }
+
+    #endregion
+
+    #region Client
 
     public void OnStartAuthority()
     {
