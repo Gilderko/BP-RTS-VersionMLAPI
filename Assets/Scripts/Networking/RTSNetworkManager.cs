@@ -22,6 +22,7 @@ public class RTSNetworkManager : NetworkManager
         OnClientConnectedCallback += HandleClientConnected;
         OnClientDisconnectCallback += HandleClientDisconnected;
         OnServerStarted += ConfigureNetworkSceneManager;
+        Application.quitting += () => Shutdown();
     }
 
     private void ConfigureNetworkSceneManager()
