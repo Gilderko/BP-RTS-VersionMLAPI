@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
 using Unity.Netcode;
-using UnityEngine.UI;
 using Unity.Netcode.Transports.UNET;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class JoinLobbyMenu : MonoBehaviour
 {

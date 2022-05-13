@@ -1,10 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class HealthDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
+/// <summary>
+/// Healthbar script that displays when you hover over it with a mouse.
+/// </summary>
+public class HealthDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private Health health = null;
     [SerializeField] private GameObject healthBarParent = null;

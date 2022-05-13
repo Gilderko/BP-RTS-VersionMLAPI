@@ -1,11 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Additional data for the NetworkManager that the NetworkManager uses.
+/// </summary>
 public class NetworkManagerAdditionalData : MonoBehaviour
 {
-    [SerializeField] GameOverHandler gameOverHandler;
-    [SerializeField] UnitBase unitBase;
+    [SerializeField] private GameOverHandler gameOverHandler;
+    [SerializeField] private UnitBase unitBase;
 
     public UnitBase GetUnitBasePrefab()
     {

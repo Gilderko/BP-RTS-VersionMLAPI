@@ -1,8 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
+/// <summary>
+/// Basic projectile instantiated that has its speed set on start on both the client and the server. 
+/// 
+/// Triggers are solved on server.
+/// </summary>
 public class UnitProjectile : NetworkBehaviour
 {
     [SerializeField] private Rigidbody rb = null;
@@ -49,14 +52,13 @@ public class UnitProjectile : NetworkBehaviour
             health.DealDamage(damageToDeal);
 
             DestroySelf();
-        }       
+        }
     }
 
- 
     private void DestroySelf()
     {
         Destroy(gameObject);
     }
 
-#endregion
+    #endregion
 }

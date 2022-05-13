@@ -1,11 +1,10 @@
 ﻿using Unity.Netcode;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.InputSystem;
 
+/// <summary>
+/// Takes care of setting the path of the NavMeshAgent on the server bases on the target or the command to move to a certain place.
+/// </summary>
 public class UnitMovement : NetworkBehaviour
 {
     [SerializeField] private NavMeshAgent agent = null;

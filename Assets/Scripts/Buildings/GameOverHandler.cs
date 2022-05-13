@@ -1,9 +1,12 @@
-using Unity.Netcode;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
+/// <summary>
+/// Handles what happens when the last player base is despawned. Can include logic specific for both the server and the client.
+/// </summary>
 public class GameOverHandler : NetworkBehaviour
 {
     public static event Action ServerOnGameOver;
@@ -13,7 +16,6 @@ public class GameOverHandler : NetworkBehaviour
     public static event Action<string> ClientOnGameOver;
 
     #region Server
-
 
     public override void OnNetworkSpawn()
     {
@@ -36,7 +38,6 @@ public class GameOverHandler : NetworkBehaviour
         base.OnNetworkDespawn();
     }
 
-
     private void ServerHandleBaseSpawned(UnitBase unitBase)
     {
         bases.Add(unitBase);
@@ -56,11 +57,20 @@ public class GameOverHandler : NetworkBehaviour
         RpcGameOverClientRpc($"Player {winnerIndex.ToString()}");
 
         ServerOnGameOver?.Invoke();
+
+        StartCoroutine(DelayedQuit(5));
     }
 
-#endregion
+    private IEnumerator DelayedQuit(float timer)
+    {
+        yield return new WaitForSeconds(timer);
 
-#region Client
+        Application.Quit();
+    }
+
+    #endregion
+
+    #region Client
 
     [ClientRpc]
     private void RpcGameOverClientRpc(string winner)
@@ -68,5 +78,5 @@ public class GameOverHandler : NetworkBehaviour
         ClientOnGameOver?.Invoke(winner);
     }
 
-#endregion
+    #endregion
 }

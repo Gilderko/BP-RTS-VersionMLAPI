@@ -1,10 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
 using Unity.Netcode;
-using System;
+using UnityEngine;
 
+/// <summary>
+/// Displays the ammount of resources we have locally in UI.
+/// </summary>
 public class CurrencyDisplay : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI resourcesText = null;
@@ -20,7 +20,7 @@ public class CurrencyDisplay : MonoBehaviour
             player = (NetworkManager.Singleton as RTSNetworkManager).GetRTSPlayerByUID(NetworkManager.Singleton.LocalClientId);
             ClientHandleResourcesUpdated(player.GetResources());
             player.ClientOnResourcesUpdated += ClientHandleResourcesUpdated;
-        } 
+        }
     }
 
     private void OnDestroy()

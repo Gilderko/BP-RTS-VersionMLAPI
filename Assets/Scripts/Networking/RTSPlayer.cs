@@ -1,12 +1,16 @@
-using Unity.Netcode;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using UnityEngine;
 using Unity.Collections;
+using Unity.Netcode;
+using UnityEngine;
 
+/// <summary>
+/// Abstraction on top of the connected user. Serves as the "PlayerPrefab" or the "PlayerObject".
+/// 
+/// Stores: resources, player name, session ownership, players Units and Buildings
+/// Also includes logic for checking if buildings can be placed, and setting synchronised variables.
+/// </summary>
 public class RTSPlayer : NetworkBehaviour
 {
     [SerializeField]
@@ -15,7 +19,7 @@ public class RTSPlayer : NetworkBehaviour
     [SerializeField]
     private LayerMask buildingKeepDistanceLayer = new LayerMask();
 
-    [SerializeField] 
+    [SerializeField]
     private Building[] buildings = new Building[0];
 
     [SerializeField]
@@ -30,16 +34,16 @@ public class RTSPlayer : NetworkBehaviour
     [SerializeField]
     private Vector2 cameraStartOffset = new Vector2(-5, -5);
 
-    private NetworkVariable<int> resources = 
+    private NetworkVariable<int> resources =
         new NetworkVariable<int>(NetworkVariableReadPermission.OwnerOnly, 500);
 
-    private NetworkVariable<bool> isPartyOwner = 
+    private NetworkVariable<bool> isPartyOwner =
         new NetworkVariable<bool>(NetworkVariableReadPermission.Everyone, false);
 
-    private NetworkVariable<FixedString32Bytes> playerName = 
+    private NetworkVariable<FixedString32Bytes> playerName =
         new NetworkVariable<FixedString32Bytes>(NetworkVariableReadPermission.Everyone, "");
 
-    private NetworkVariable<Vector3> startPosition = 
+    private NetworkVariable<Vector3> startPosition =
         new NetworkVariable<Vector3>(NetworkVariableReadPermission.Everyone, new Vector3(0, 0, 21));
 
     public event Action<int> ClientOnResourcesUpdated;
@@ -49,16 +53,19 @@ public class RTSPlayer : NetworkBehaviour
 
     private Color teamColor = new Color();
 
-    [SerializeField] 
+    // On clients the other RTSPlayer units are empty, only the local player units are stored here
+    // On the server every RTSPlayer has his units stored here
+    [SerializeField]
     private HashSet<Unit> myUnits = new HashSet<Unit>();
 
-    [SerializeField] 
+    // On clients the other RTSPlayer buildings are empty, only the local player buildings are stored here
+    // On the server every RTSPlayer has his buildings stored here
+    [SerializeField]
     private HashSet<Building> myBuildings = new HashSet<Building>();
 
     public override void OnNetworkSpawn()
     {
         ((RTSNetworkManager)NetworkManager.Singleton).Players.Add(this);
-
 
         if (IsServer)
         {
@@ -76,7 +83,6 @@ public class RTSPlayer : NetworkBehaviour
 
     public override void OnNetworkDespawn()
     {
-
         if (IsServer)
         {
             OnStopServer();
@@ -90,15 +96,14 @@ public class RTSPlayer : NetworkBehaviour
         base.OnNetworkDespawn();
     }
 
-
-#region Server
+    #region Server
 
     public void OnStartServer()
     {
         Unit.ServerOnUnitSpawned += ServerHandleUnitSpawned;
         Unit.ServerOnUnitDespawned += ServerHandleUnitDespawned;
         Building.ServerOnBuildingSpawned += ServerHandleBuildingSpawned;
-        Building.ServerOnBuildingDespawned += ServerHandleBuildingDespawned;        
+        Building.ServerOnBuildingDespawned += ServerHandleBuildingDespawned;
     }
 
     public void SetPlayerName(string displayName)
@@ -115,10 +120,8 @@ public class RTSPlayer : NetworkBehaviour
 
     private void ServerHandleBuildingSpawned(Building building)
     {
-        //Debug.Log("Handling spawning");
         if (building.OwnerClientId != OwnerClientId) { return; }
 
-        //Debug.Log("Addding to my buildings");
         myBuildings.Add(building);
     }
 
@@ -176,9 +179,9 @@ public class RTSPlayer : NetworkBehaviour
     [ServerRpc]
     public void CmdStartGameServerRpc()
     {
-        if (!isPartyOwner.Value) 
-        { 
-            return; 
+        if (!isPartyOwner.Value)
+        {
+            return;
         }
 
         ((RTSNetworkManager)NetworkManager.Singleton).StartGame();
@@ -186,7 +189,7 @@ public class RTSPlayer : NetworkBehaviour
 
     [ServerRpc]
     public void CmdTryPlaceBuildingServerRpc(int buildingID, Vector3 positionToSpawn)
-    {       
+    {
         Building buildingToPlace = buildings.First(build => build.GetID() == buildingID);
 
         if (buildingToPlace == null)
@@ -199,24 +202,23 @@ public class RTSPlayer : NetworkBehaviour
             return;
         }
 
-        BoxCollider buildingCollider = buildingToPlace.GetComponent<BoxCollider>();        
+        BoxCollider buildingCollider = buildingToPlace.GetComponent<BoxCollider>();
 
         if (!CanPlaceBuilding(buildingCollider, positionToSpawn))
         {
-            //Debug.Log("Server says I cant place building");
             return;
         }
 
         GameObject building = Instantiate(buildingToPlace.gameObject, positionToSpawn, Quaternion.identity);
-        
+
         building.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId, true);
 
         AddResources(-buildingToPlace.GetPrice());
     }
 
-#endregion
+    #endregion
 
-#region Client
+    #region Client
 
     public void OnStartAuthority()
     {
@@ -225,7 +227,7 @@ public class RTSPlayer : NetworkBehaviour
             return;
         }
 
-        isPartyOwner.OnValueChanged += AuthorityHandlePartyOwnerStateUpdated;                
+        isPartyOwner.OnValueChanged += AuthorityHandlePartyOwnerStateUpdated;
 
         Unit.AuthorityOnUnitSpawned += AuthorityHandleUnitSpawned;
         Unit.AuthorityOnUnitDespawned += AuthorityHandleUnitDespawned;
@@ -237,10 +239,9 @@ public class RTSPlayer : NetworkBehaviour
     {
         resources.OnValueChanged += ClientHandleResourcesUpdated;
         playerName.OnValueChanged += ClientHandleDisplayNameUpdated;
-        startPosition.OnValueChanged += ClientHandleStartCameraPositionUpdated;    
+        startPosition.OnValueChanged += ClientHandleStartCameraPositionUpdated;
     }
 
- 
     private void AuthorityHandlePartyOwnerStateUpdated(bool oldState, bool newState)
     {
         if (!IsOwner)
@@ -262,12 +263,10 @@ public class RTSPlayer : NetworkBehaviour
         myBuildings.Remove(building);
     }
 
-
     private void AuthorityHandleBuildingSpawned(Building building)
     {
         myBuildings.Add(building);
     }
-
 
     private void ClientHandleStartCameraPositionUpdated(Vector3 oldVec, Vector3 newVec)
     {
@@ -278,7 +277,6 @@ public class RTSPlayer : NetworkBehaviour
 
         cameraTransform.position = new Vector3(newVec.x + cameraStartOffset.x, 21, newVec.z + cameraStartOffset.y);
     }
-
 
     public void OnStopClient()
     {
@@ -310,14 +308,14 @@ public class RTSPlayer : NetworkBehaviour
     private void AuthorityHandleUnitDespawned(Unit unit)
     {
         myUnits.Remove(unit);
-    } 
+    }
 
     private void ClientHandleResourcesUpdated(int oldValue, int newValue)
     {
         ClientOnResourcesUpdated?.Invoke(newValue);
     }
 
-#endregion
+    #endregion
 
     public int GetResources()
     {
@@ -338,24 +336,22 @@ public class RTSPlayer : NetworkBehaviour
     {
         if (Physics.CheckBox(
             positionToSpawn + buildingCollider.center,
-            buildingCollider.size / 2, 
+            buildingCollider.size / 2,
             Quaternion.identity,
             buildingBlockCollisionLayer))
         {
-            //Debug.Log("Collision problem");
             return false;
         }
 
         RaycastHit[] hits = Physics.SphereCastAll(positionToSpawn, buildingFromEnemyLimit, Vector3.up, buildingKeepDistanceLayer);
         foreach (RaycastHit hit in hits)
         {
-            Unit possibleUnit = hit.transform.GetComponent<Unit>();            
+            Unit possibleUnit = hit.transform.GetComponent<Unit>();
             if (possibleUnit != null)
-            {                
+            {
                 bool hasAuth = IsClient ? possibleUnit.IsOwner : possibleUnit.OwnerClientId == OwnerClientId;
                 if (!hasAuth)
                 {
-                    //Debug.Log("Too close to enemy unit");
                     return false;
                 }
             }
@@ -366,7 +362,6 @@ public class RTSPlayer : NetworkBehaviour
                 bool hasAuth = IsClient ? possibleBuilding.IsOwner : possibleBuilding.OwnerClientId == OwnerClientId;
                 if (!hasAuth)
                 {
-                    //Debug.Log("Too close to enemy building");
                     return false;
                 }
             }
@@ -376,12 +371,10 @@ public class RTSPlayer : NetworkBehaviour
         {
             if ((positionToSpawn - build.transform.position).sqrMagnitude <= buildingRangeLimit * buildingRangeLimit)
             {
-                //Debug.Log("Close enough to my buildings");
                 return true;
             }
         }
 
-        //Debug.Log("Not close enough to my buildings");
         return false;
     }
 
@@ -399,7 +392,7 @@ public class RTSPlayer : NetworkBehaviour
     {
         return isPartyOwner.Value;
     }
-    
+
     public string GetDisplayName()
     {
         var value = playerName.Value;

@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Unity.Netcode;
+using UnityEngine;
 
+/// <summary>
+/// Needs to be added to every unit and building to distinguish their color. Color can be changed during the match and will be updated automatically.
+/// </summary>
 public class TeamColorSetter : NetworkBehaviour
 {
     [SerializeField] private Renderer[] colorRenderers = new Renderer[0];
@@ -34,7 +35,7 @@ public class TeamColorSetter : NetworkBehaviour
             foreach (Material material in render.materials)
             {
                 material.SetColor("_BaseColor", newColor);
-            }           
+            }
         }
     }
 
