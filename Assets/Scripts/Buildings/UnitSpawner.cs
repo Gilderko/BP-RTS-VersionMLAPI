@@ -1,12 +1,12 @@
+using TMPro;
 using Unity.Netcode;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using TMPro;
 using UnityEngine.UI;
-using UnityEngine.AI;
 
+/// <summary>
+/// Handles spawning specific units assigned with a maximum que. Spawning happens on the server and is then replicated to clients.
+/// </summary>
 public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
 {
     [SerializeField] private Health health = null;
@@ -18,9 +18,9 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
     [SerializeField] private float spawnMoveRange = 7;
     [SerializeField] private float unitSpawnDuration = 5f;
 
-    private NetworkVariable<int> queuedUnits = new NetworkVariable<int>(NetworkVariableReadPermission.Everyone,0);
+    private NetworkVariable<int> queuedUnits = new NetworkVariable<int>(NetworkVariableReadPermission.Everyone, 0);
 
-    private NetworkVariable<float> unitTimer = new NetworkVariable<float>(NetworkVariableReadPermission.Everyone,0f);
+    private NetworkVariable<float> unitTimer = new NetworkVariable<float>(NetworkVariableReadPermission.Everyone, 0f);
     private float progressImageVelocity;
 
     private void Update()
@@ -68,7 +68,7 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
         base.OnNetworkDespawn();
     }
 
-#region Server
+    #region Server
 
     private void ServerHandleDie()
     {
@@ -124,9 +124,9 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
         unitTimer.Value = 0.0f;
     }
 
-#endregion
+    #endregion
 
-#region Client
+    #region Client
 
     public void OnPointerClick(PointerEventData eventData)
     {
@@ -142,7 +142,7 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
     private void ClientHandleQueuedUnitsUpdated(int oldAmount, int newAmount)
     {
         remainingUnitsText.text = newAmount.ToString();
-    }    
+    }
 
     private void UpdateTimerDisplay()
     {
@@ -157,5 +157,6 @@ public class UnitSpawner : NetworkBehaviour, IPointerClickHandler
             unitProgressImage.fillAmount = Mathf.SmoothDamp(unitProgressImage.fillAmount, newProgress, ref progressImageVelocity, 0.1f);
         }
     }
-#endregion
+
+    #endregion
 }

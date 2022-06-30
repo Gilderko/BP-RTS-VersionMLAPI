@@ -1,10 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Unity.Netcode;
-using UnityEngine.Events;
 using System;
+using Unity.Netcode;
+using UnityEngine;
+using UnityEngine.Events;
 
+/// <summary>
+/// Base component to all units. Includes references to all other components such as UnitMovement, Targeter and Health.
+/// 
+/// Includes events for unit selection that enable the sprite to show that unit is selected.
+/// </summary>
 public class Unit : NetworkBehaviour
 {
     [SerializeField] private UnitMovement unitMovement = null;
@@ -24,7 +27,6 @@ public class Unit : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-
         if (IsServer)
         {
             ServerOnUnitSpawned?.Invoke(this);
@@ -40,8 +42,7 @@ public class Unit : NetworkBehaviour
     }
 
     public override void OnNetworkDespawn()
-    { 
-
+    {
         if (IsServer)
         {
             health.ServerOnDie -= ServerHandleDie;
@@ -56,17 +57,16 @@ public class Unit : NetworkBehaviour
         base.OnNetworkDespawn();
     }
 
-#region Server
+    #region Server
 
     private void ServerHandleDie()
     {
         Destroy(gameObject);
     }
 
-#endregion
+    #endregion
 
-#region Client
-
+    #region Client
 
     public void Select()
     {
@@ -88,7 +88,7 @@ public class Unit : NetworkBehaviour
         onDeselected.Invoke();
     }
 
-#endregion
+    #endregion
 
     public UnitMovement GetUnitMovement()
     {

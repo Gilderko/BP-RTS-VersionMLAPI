@@ -1,22 +1,21 @@
 using Unity.Netcode;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Component that handles current enemy target that the GameObject should attack.
+/// </summary>
 public class Targeter : NetworkBehaviour
 {
     [SerializeField] private Targetable target;
 
     #region Server
 
-
     public override void OnNetworkSpawn()
     {
         if (IsServer)
         {
             GameOverHandler.ServerOnGameOver += ServerHandleGameOver;
-        }        
+        }
 
         base.OnNetworkSpawn();
     }
@@ -61,7 +60,7 @@ public class Targeter : NetworkBehaviour
         target = null;
     }
 
-#endregion
+    #endregion
 
     public Targetable GetTarget()
     {

@@ -1,10 +1,11 @@
 using Unity.Netcode;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Takes care of navigating when clicking on the minimap.
+/// </summary>
 public class Minimap : MonoBehaviour, IPointerDownHandler, IDragHandler
 {
     [SerializeField] private RectTransform minimapRect;
@@ -30,7 +31,7 @@ public class Minimap : MonoBehaviour, IPointerDownHandler, IDragHandler
         Vector2 mousePos = Mouse.current.position.ReadValue();
 
         Vector2 localPos;
-        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(minimapRect,mousePos,null,out localPos))
+        if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(minimapRect, mousePos, null, out localPos))
         {
             return;
         }

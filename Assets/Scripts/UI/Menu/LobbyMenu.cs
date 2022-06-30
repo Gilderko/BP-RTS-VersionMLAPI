@@ -1,11 +1,12 @@
-using Unity.Netcode;
-using System;
-using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/// <summary>
+/// UI components that displays connected users.
+/// </summary>
 public class LobbyMenu : MonoBehaviour
 {
     [SerializeField] private GameObject lobbyUi;
@@ -21,7 +22,7 @@ public class LobbyMenu : MonoBehaviour
         RTSNetworkManager.ClientOnConnected += HandleClientConnected;
         RTSPlayer.AuthorityOnPartyOwnerChanged += AuthorityHandlePartyOwnerStateUpdate;
         RTSPlayer.ClientOnInfoUpdated += ClientHandleInfoUpdated;
-    }    
+    }
 
     private void OnDestroy()
     {
@@ -44,11 +45,11 @@ public class LobbyMenu : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-        List<RTSPlayer> players = ((RTSNetworkManager) NetworkManager.Singleton).Players;
+        List<RTSPlayer> players = ((RTSNetworkManager)NetworkManager.Singleton).Players;
 
         for (int i = 0; i < players.Count; i++)
         {
-            var playerUIInstance = Instantiate(playerLobbyUI,playerParent);
+            var playerUIInstance = Instantiate(playerLobbyUI, playerParent);
             playerUIInstance.SetName(players[i].GetDisplayName());
         }
     }
@@ -74,9 +75,6 @@ public class LobbyMenu : MonoBehaviour
 
     public void StartGame()
     {
-        //Debug.Log("Client wants to start");
-        //
-        //(NetworkManager.Singleton as RTSNetworkManager).GetRTSPlayerByUID(NetworkManager.Singleton.LocalClientId).IsPartyOwner());
         (NetworkManager.Singleton as RTSNetworkManager).GetRTSPlayerByUID(NetworkManager.Singleton.LocalClientId).CmdStartGameServerRpc();
     }
 }

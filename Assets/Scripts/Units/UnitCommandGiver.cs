@@ -1,10 +1,10 @@
 using Unity.Netcode;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Handles setting commands on the client and then calling the RPCs on the server to perform requested actions.
+/// </summary>
 public class UnitCommandGiver : MonoBehaviour
 {
     [SerializeField] private UnitSelectionHandler unitSelectionHandler = null;
@@ -26,7 +26,7 @@ public class UnitCommandGiver : MonoBehaviour
         GameOverHandler.ClientOnGameOver -= ClientHandleGameOver;
     }
 
-    void Update()
+    private void Update()
     {
         if (!Mouse.current.rightButton.wasPressedThisFrame)
         {
@@ -54,7 +54,7 @@ public class UnitCommandGiver : MonoBehaviour
         else
         {
             TryMove(hit.point);
-        }        
+        }
     }
 
 #endif
@@ -63,7 +63,6 @@ public class UnitCommandGiver : MonoBehaviour
     {
         enabled = false;
     }
-
 
     private void TryTarget(Targetable target)
     {
@@ -76,7 +75,7 @@ public class UnitCommandGiver : MonoBehaviour
 
     public void TryMove(Vector3 point)
     {
-        foreach(Unit unit in unitSelectionHandler.GetSelectedUnits())
+        foreach (Unit unit in unitSelectionHandler.GetSelectedUnits())
         {
             unit.GetUnitMovement().CmdMoveServerRpc(point);
         }

@@ -1,9 +1,10 @@
-using Unity.Netcode;
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
+/// <summary>
+/// The base for every player. Fires the event when it gets destroyed.
+/// </summary>
 public class UnitBase : NetworkBehaviour
 {
     [SerializeField] private Health health = null;
@@ -14,7 +15,6 @@ public class UnitBase : NetworkBehaviour
     public static event Action<ulong> ServerOnPlayerDie;
 
     #region Server
-
 
     public override void OnNetworkSpawn()
     {
@@ -45,6 +45,5 @@ public class UnitBase : NetworkBehaviour
         Destroy(gameObject);
     }
 
-
-#endregion
+    #endregion
 }

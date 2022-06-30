@@ -1,9 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
-using Unity.Netcode;
+using UnityEngine;
 
 public class GameOverDisplay : MonoBehaviour
 {
@@ -26,14 +22,7 @@ public class GameOverDisplay : MonoBehaviour
 
     public void LeaveGame()
     {
-        if (NetworkManager.Singleton.IsServer)
-        {
-            NetworkManager.Singleton.Shutdown();
-        }
-        else if (NetworkManager.Singleton.IsClient)
-        {
-            NetworkManager.Singleton.Shutdown();
-        }        
+        Application.Quit();
     }
 
     private void ClientHandleGameOver(string playerName)

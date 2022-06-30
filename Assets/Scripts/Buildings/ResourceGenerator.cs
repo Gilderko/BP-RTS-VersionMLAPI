@@ -1,9 +1,9 @@
 using Unity.Netcode;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Generates resources for the player that spawned it with certain interval and ammount per interval. Resource generation happens on the server.
+/// </summary>
 public class ResourceGenerator : NetworkBehaviour
 {
     [SerializeField] private Health health = null;
@@ -14,7 +14,6 @@ public class ResourceGenerator : NetworkBehaviour
     private RTSPlayer player;
 
     #region Server
-
 
     public override void OnNetworkSpawn()
     {
@@ -58,7 +57,6 @@ public class ResourceGenerator : NetworkBehaviour
 
 #endif
 
-
     private void ServerHandleGameOver()
     {
         enabled = false;
@@ -68,5 +66,6 @@ public class ResourceGenerator : NetworkBehaviour
     {
         Destroy(gameObject);
     }
-#endregion
+
+    #endregion
 }

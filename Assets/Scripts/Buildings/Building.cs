@@ -1,7 +1,5 @@
-using Unity.Netcode;
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class Building : NetworkBehaviour
@@ -16,16 +14,15 @@ public class Building : NetworkBehaviour
     public static event Action<Building> ServerOnBuildingDespawned;
 
     public static event Action<Building> AuthorityOnBuildingSpawned;
-    public static event Action<Building> AuthorityOnBuildingDespawned; 
+    public static event Action<Building> AuthorityOnBuildingDespawned;
 
+    /// <summary>
+    /// The base component for all buildings. Holds information for the UI sprite, Id, price and name of the building.
+    /// </summary>
     public override void OnNetworkSpawn()
     {
-        //Debug.Log("Building networkspawn");
-
-        //Debug.Log("Building networkspawn server");
         if (IsServer)
         {
-            //Debug.Log("Building spawned on server");
             ServerOnBuildingSpawned?.Invoke(this);
         }
 

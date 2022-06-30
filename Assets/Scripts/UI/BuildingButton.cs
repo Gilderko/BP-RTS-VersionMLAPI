@@ -1,12 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 using Unity.Netcode;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
+/// <summary>
+/// Component that stores which building it is supposed to represent. Takes care of updating the preview and asking the server to spawn the building.
+/// </summary>
 public class BuildingButton : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private Building representedBuilding = null;
@@ -37,7 +38,7 @@ public class BuildingButton : MonoBehaviour, IPointerClickHandler
         if (NetworkManager.Singleton.IsClient)
         {
             player = (NetworkManager.Singleton as RTSNetworkManager).GetRTSPlayerByUID(NetworkManager.Singleton.LocalClientId);
-        }        
+        }
     }
 
     private void Update()
@@ -67,7 +68,7 @@ public class BuildingButton : MonoBehaviour, IPointerClickHandler
             }
 
             Destroy(buildingPreviewInstance);
-            buildingRendererInstance = null;           
+            buildingRendererInstance = null;
         }
         else if (hasHit)
         {
@@ -99,8 +100,6 @@ public class BuildingButton : MonoBehaviour, IPointerClickHandler
         {
             return;
         }
-
-        //Debug.Log("Creating building");
 
         buildingPreviewInstance = Instantiate(representedBuilding.GetBuildingPreview());
         buildingRendererInstance = buildingPreviewInstance.GetComponentInChildren<Renderer>();

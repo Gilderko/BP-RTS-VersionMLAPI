@@ -1,9 +1,10 @@
-using Unity.Netcode;
 using System;
-using System.Collections;
-using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
+/// <summary>
+/// Basic health component where all damage dealing is handled on server.
+/// </summary>
 public class Health : NetworkBehaviour
 {
     [SerializeField] private int maxHealth = 100;
@@ -16,7 +17,6 @@ public class Health : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-
         if (IsServer)
         {
             currentHealth.Value = maxHealth;
@@ -33,7 +33,6 @@ public class Health : NetworkBehaviour
 
     public override void OnNetworkDespawn()
     {
-
         if (IsServer)
         {
             UnitBase.ServerOnPlayerDie -= ServerHandlePlayerDie;
@@ -47,7 +46,7 @@ public class Health : NetworkBehaviour
         base.OnNetworkDespawn();
     }
 
-#region Server
+    #region Server
 
     private void ServerHandlePlayerDie(ulong connectionID)
     {
@@ -76,14 +75,14 @@ public class Health : NetworkBehaviour
         ServerOnDie?.Invoke();
     }
 
-#endregion
+    #endregion
 
-#region Client
+    #region Client
 
     private void HandeHealthUpdated(int oldHealth, int newHealth)
     {
-        ClientOnHealthUpdated(newHealth,maxHealth);
+        ClientOnHealthUpdated(newHealth, maxHealth);
     }
 
-#endregion
+    #endregion
 }
